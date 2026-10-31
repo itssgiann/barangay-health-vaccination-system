@@ -56,8 +56,22 @@ INSERT INTO vaccination_records (record_id, resident_id, batch_id, staff_id, mil
 
 -- == F - ANGELIQUE ==
 
+INSERT INTO households
+(household_id, zone_id, household_name, address)
+VALUES
+(1, 1, 'Dela Cruz Household', '123 Riverside St.'),
+(2, 2, 'Santos Household', '45 Central Ave.'),
+(3, 3, 'Reyes Household', '78 Hillside Rd.');
 
-
+INSERT INTO adverse_events
+(event_id, record_id, reported_by, severity, description,
+ onset_date, outcome, reported_at)
+VALUES
+(1, 1, 2, 'Mild',
+ 'Low-grade fever and mild soreness at injection site',
+ '2026-10-16',
+ 'Resolved after 24 hours with oral paracetamol',
+ '2026-10-16 14:00:00');
 
 
 SET FOREIGN_KEY_CHECKS = 1;
