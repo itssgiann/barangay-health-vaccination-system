@@ -98,7 +98,40 @@ CREATE TABLE vaccination_records (
 
 -- == VINCE ==
 
+CREATE TABLE health_equipment (
+    equipment_id          INT          AUTO_INCREMENT PRIMARY KEY,
+    equipment_name        VARCHAR(100) NOT NULL,
+    equipment_type        VARCHAR(50)  NOT NULL,
+    location              VARCHAR(100),
+    min_temp              DECIMAL(4,1),
+    max_temp              DECIMAL(4,1),
+    status                VARCHAR(25)  NOT NULL,
+    last_maintenance_date DATE
+);
 
+CREATE TABLE temperature_logs (
+    log_id              INT          AUTO_INCREMENT PRIMARY KEY,
+    equipment_id        INT          NOT NULL,
+    recorded_by         INT          NOT NULL,
+    temperature_celsius DECIMAL(4,1) NOT NULL,
+    is_out_of_range     BOOLEAN      NOT NULL,
+    recorded_at         DATETIME     NOT NULL,
+    FOREIGN KEY (equipment_id) REFERENCES health_equipment(equipment_id),
+    FOREIGN KEY (recorded_by)  REFERENCES medical_staff(staff_id)
+);
+
+CREATE TABLE alerts (
+    alert_id    INT          AUTO_INCREMENT PRIMARY KEY,
+    assigned_to INT          NOT NULL,
+    alert_type  VARCHAR(25)  NOT NULL,
+    severity    VARCHAR(10)  NOT NULL,
+    message     VARCHAR(255) NOT NULL,
+    related_id  INT,
+    status      VARCHAR(15)  NOT NULL,
+    created_at  DATETIME,
+    resolved_at DATETIME,
+    FOREIGN KEY (assigned_to) REFERENCES medical_staff(staff_id)
+);
 
 
 -- == ANGELIQUE ==
