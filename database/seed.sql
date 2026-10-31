@@ -28,7 +28,18 @@ INSERT INTO users (user_id, staff_id, username, password_hash, role, is_active, 
 
 -- == C - IAN ==
 
+INSERT INTO appointments (appointment_id, resident_id, vaccine_id, staff_id, dose_number, scheduled_date, status, notes) VALUES
+(1, 1, 2, 2, 1, '2026-11-05', 'Scheduled', 'First dose of Hepatitis B schedule'),
+(2, 2, 4, 1, 1, '2026-11-06', 'Scheduled', 'Annual routine flu shot check'),
+(3, 3, 4, 2, 1, '2026-10-20', 'Completed', 'Senior citizen priority vaccine day');
 
+INSERT INTO consultations (consultation_id, resident_id, staff_id, consultation_date, temperature_celsius, blood_pressure, pulse_rate, weight_kg, height_cm, chief_complaint, diagnosis, notes) VALUES
+(1, 1, 1, '2026-10-15 09:30:00', 36.6, '90/60', 110, 8.50, 72.0, 'Routine well-baby checkup', 'Healthy infant', 'Cleared for routine vaccination'),
+(2, 3, 1, '2026-10-20 10:00:00', 36.8, '130/85', 74, 68.20, 165.0, 'Pre-vaccine assessment', 'Controlled hypertension', 'Cleared and administered flu vaccine');
+
+INSERT INTO vaccination_records (record_id, resident_id, batch_id, staff_id, milestone_id, date_administered, next_due_date, next_dose_status, remarks) VALUES
+(1, 1, 1, 2, 1, '2026-10-15', '2026-11-15', 'Due', 'Dose 1 administered right arm'),
+(2, 3, 3, 2, 4, '2026-10-20', NULL, 'Completed', 'Annual seasonal flu vaccine administered');
 
 
 -- == D - JOSEPH ==
