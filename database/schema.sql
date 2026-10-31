@@ -38,6 +38,30 @@ CREATE TABLE users (
 
 -- == CHRIST JOHN ==
 
+CREATE TABLE residents (
+    resident_id    INT         AUTO_INCREMENT PRIMARY KEY,
+    household_id   INT         NOT NULL,
+    zone_id        INT         NOT NULL,
+    first_name     VARCHAR(50) NOT NULL,
+    middle_name    VARCHAR(50),
+    last_name      VARCHAR(50) NOT NULL,
+    birthdate      DATE        NOT NULL,
+    gender         VARCHAR(10) NOT NULL,
+    address        VARCHAR(255),
+    contact_number VARCHAR(20),
+    created_at     DATETIME,
+    FOREIGN KEY (household_id) REFERENCES households(household_id),
+    FOREIGN KEY (zone_id)      REFERENCES barangay_zones(zone_id)
+);
+
+CREATE TABLE vaccines (
+    vaccine_id           INT          AUTO_INCREMENT PRIMARY KEY,
+    vaccine_name         VARCHAR(100) NOT NULL UNIQUE,
+    description          VARCHAR(255),
+    total_doses_required INT          NOT NULL,
+    storage_temp_min     DECIMAL(4,1),
+    storage_temp_max     DECIMAL(4,1)
+);
 
 
 
