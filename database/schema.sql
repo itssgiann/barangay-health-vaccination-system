@@ -43,7 +43,52 @@ CREATE TABLE users (
 
 -- == IAN ==
 
+CREATE TABLE appointments (
+    appointment_id INT          AUTO_INCREMENT PRIMARY KEY,
+    resident_id    INT          NOT NULL,
+    vaccine_id     INT          NOT NULL,
+    staff_id       INT          NOT NULL,
+    dose_number    INT          NOT NULL,
+    scheduled_date DATE         NOT NULL,
+    status         VARCHAR(20)  NOT NULL,
+    notes          VARCHAR(255),
+    FOREIGN KEY (resident_id) REFERENCES residents(resident_id),
+    FOREIGN KEY (vaccine_id)  REFERENCES vaccines(vaccine_id),
+    FOREIGN KEY (staff_id)    REFERENCES medical_staff(staff_id)
+);
 
+CREATE TABLE consultations (
+    consultation_id     INT          AUTO_INCREMENT PRIMARY KEY,
+    resident_id         INT          NOT NULL,
+    staff_id            INT          NOT NULL,
+    consultation_date   DATETIME     NOT NULL,
+    temperature_celsius DECIMAL(4,1),
+    blood_pressure      VARCHAR(10),
+    pulse_rate          INT,
+    weight_kg           DECIMAL(5,2),
+    height_cm           DECIMAL(5,1),
+    chief_complaint     VARCHAR(255),
+    diagnosis           VARCHAR(255),
+    notes               VARCHAR(500),
+    FOREIGN KEY (resident_id) REFERENCES residents(resident_id),
+    FOREIGN KEY (staff_id)    REFERENCES medical_staff(staff_id)
+);
+
+CREATE TABLE vaccination_records (
+    record_id         INT          AUTO_INCREMENT PRIMARY KEY,
+    resident_id       INT          NOT NULL,
+    batch_id          INT          NOT NULL,
+    staff_id          INT          NOT NULL,
+    milestone_id      INT          NOT NULL,
+    date_administered DATE         NOT NULL,
+    next_due_date     DATE,
+    next_dose_status  VARCHAR(10),
+    remarks           VARCHAR(255),
+    FOREIGN KEY (resident_id)  REFERENCES residents(resident_id),
+    FOREIGN KEY (batch_id)     REFERENCES vaccine_batches(batch_id),
+    FOREIGN KEY (staff_id)     REFERENCES medical_staff(staff_id),
+    FOREIGN KEY (milestone_id) REFERENCES immunization_milestones(milestone_id)
+);
 
 
 -- == JOSEPH ==
