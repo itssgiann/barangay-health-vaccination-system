@@ -103,7 +103,26 @@ CREATE TABLE vaccination_records (
 
 -- == ANGELIQUE ==
 
+CREATE TABLE households (
+    household_id   INT          AUTO_INCREMENT PRIMARY KEY,
+    zone_id        INT          NOT NULL,
+    household_name VARCHAR(100) NOT NULL,
+    address        VARCHAR(255),
+    FOREIGN KEY (zone_id) REFERENCES barangay_zones(zone_id)
+);
 
+CREATE TABLE adverse_events (
+    event_id    INT          AUTO_INCREMENT PRIMARY KEY,
+    record_id   INT          NOT NULL,
+    reported_by INT          NOT NULL,
+    severity    VARCHAR(10)  NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    onset_date  DATE,
+    outcome     VARCHAR(255),
+    reported_at DATETIME,
+    FOREIGN KEY (record_id)   REFERENCES vaccination_records(record_id),
+    FOREIGN KEY (reported_by) REFERENCES medical_staff(staff_id)
+);
 
 
 SET FOREIGN_KEY_CHECKS = 1;
