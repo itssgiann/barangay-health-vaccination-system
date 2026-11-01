@@ -117,7 +117,42 @@ CREATE TABLE vaccination_records (
 
 -- == JOSEPH ==
 
+CREATE TABLE immunization_milestones (
+    milestone_id         INT          AUTO_INCREMENT PRIMARY KEY,
+    vaccine_id           INT          NOT NULL,
+    dose_number          INT          NOT NULL,
+    recommended_age_days INT          NOT NULL,
+    min_interval_days    INT          NOT NULL,
+    notes                VARCHAR(255),
+    UNIQUE (vaccine_id, dose_number),
+    FOREIGN KEY (vaccine_id) REFERENCES vaccines(vaccine_id)
+);
 
+CREATE TABLE vaccine_batches (
+    batch_id           INT          AUTO_INCREMENT PRIMARY KEY,
+    vaccine_id         INT          NOT NULL,
+    equipment_id       INT          NOT NULL,
+    batch_number       VARCHAR(50)  NOT NULL UNIQUE,
+    quantity_received  INT          NOT NULL,
+    quantity_remaining INT          NOT NULL,
+    received_date      DATE         NOT NULL,
+    expiry_date        DATE         NOT NULL,
+    status             VARCHAR(20)  NOT NULL,
+    FOREIGN KEY (vaccine_id)   REFERENCES vaccines(vaccine_id),
+    FOREIGN KEY (equipment_id) REFERENCES health_equipment(equipment_id)
+);
+
+CREATE TABLE inventory_stock_movements (
+    movement_id   INT          AUTO_INCREMENT PRIMARY KEY,
+    batch_id      INT          NOT NULL,
+    staff_id      INT          NOT NULL,
+    movement_type VARCHAR(20)  NOT NULL,
+    quantity      INT          NOT NULL,
+    remarks       VARCHAR(255),
+    movement_date DATETIME,
+    FOREIGN KEY (batch_id) REFERENCES vaccine_batches(batch_id),
+    FOREIGN KEY (staff_id) REFERENCES medical_staff(staff_id)
+);
 
 
 -- == VINCE ==
