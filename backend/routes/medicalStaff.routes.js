@@ -3,6 +3,7 @@ const router = express.Router();
 const controller = require('../controllers/medicalStaff.controller');
 
 router.get('/', controller.getAll);
+router.get('/with-zones', controller.getWithZones);
 router.get('/:id', controller.getById);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
