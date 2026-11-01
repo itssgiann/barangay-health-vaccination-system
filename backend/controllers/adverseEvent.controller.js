@@ -181,10 +181,23 @@ const remove = (req, res) => {
     });
 };
 
+const getAdverseEventsWithResidentDetails = (req, res) => {
+    AdverseEvent.getAdverseEventsWithResidentDetails((err, results) => {
+        if (err) {
+            return res.status(500).send({
+                message: "An error occurred while retrieving adverse event details."
+            });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
 module.exports = {
     getAll,
     getById,
     create,
     update,
-    delete: remove
+    delete: remove,
+    getAdverseEventsWithResidentDetails
 };
