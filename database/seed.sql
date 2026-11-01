@@ -22,16 +22,17 @@ INSERT INTO users (user_id, staff_id, username, password_hash, role, is_active, 
 
 -- == B - CHRIST JOHN ==
 
+
 INSERT INTO residents (resident_id, household_id, zone_id, first_name, middle_name, last_name, birthdate, gender, address, contact_number, created_at) VALUES
-(1, 1, 1, 'Mateo', 'Cruz', 'Dela Cruz', '2024-05-10', 'Male', '123 Riverside St.', '09121112222', '2026-10-01 09:00:00'),
-(2, 2, 2, 'Sofia', 'Gomez', 'Santos', '2020-08-15', 'Female', '45 Central Ave.', '09123334444', '2026-10-01 09:15:00'),
-(3, 3, 3, 'Roberto', 'Tan', 'Reyes', '1960-03-22', 'Male', '78 Hillside Rd.', '09125556666', '2026-10-01 09:30:00');
+(1, 1, 1, 'Karl', 'Gwaps', 'Anqui', '2024-05-10', 'Male', 'Purok 4, Obogon, Tanjay City', NULL, '2026-10-01 09:00:00'),
+(2, 2, 2, 'Kurt', 'Bryter', 'Alvaredi', '2020-08-15', 'Male', 'Purok 2, Pamplona, Negros Oriental', NULL, '2026-10-01 09:15:00'),
+(3, 3, 3, 'Narcisso', NULL, 'Balaora', '1960-03-22', 'Male', 'Purok 1, Sibulan, Negros Oriental', NULL, '2026-10-01 09:30:00');
 
 INSERT INTO vaccines (vaccine_id, vaccine_name, description, total_doses_required, storage_temp_min, storage_temp_max) VALUES
-(1, 'BCG', 'Bacillus Calmette-Guerin vaccine against tuberculosis', 1, 2.0, 8.0),
-(2, 'Hepatitis B', 'Recombinant vaccine preventing Hepatitis B infection', 3, 2.0, 8.0),
-(3, 'Pentavalent', 'Protects against diphtheria, tetanus, pertussis, hep B, Hib', 3, 2.0, 8.0),
-(4, 'Influenza', 'Annual seasonal influenza protection', 1, 2.0, 8.0);
+(1, 'BCG', 'Vaccine for protection against tuberculosis', 1, 2.0, 8.0),
+(2, 'Hepatitis B', 'Vaccine for protection against Hepatitis B', 3, 2.0, 8.0),
+(3, 'Pentavalent', 'Vaccine against five infectious diseases', 3, 2.0, 8.0),
+(4, 'Influenza', 'Seasonal flu vaccine', 1, 2.0, 8.0);
 
 -- == C - IAN ==
 
