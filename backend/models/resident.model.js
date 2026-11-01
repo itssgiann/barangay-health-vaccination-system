@@ -4,6 +4,25 @@ const getAll = (callback) => {
     db.query('SELECT * FROM residents', callback);
 };
 
+// Get resident vaccination report
+const getVaccinationReport = (callback) => {
+    const sql = `
+        SELECT
+            r.resident_id,
+            CONCAT_WS(' ', r.first_name, r.middle_name, r.last_name) AS resident_name,
+            vr.record_id,
+            vr.date_administered,
+            vr.next_due_date,
+            vr.next_dose_status
+        FROM residents r
+        LEFT JOIN vaccination_records vr
+            ON r.resident_id = vr.resident_id
+        ORDER BY r.resident_id, vr.date_administered
+    `;
+
+    db.query(sql, callback);
+};
+
 const getById = (id, callback) => {
     db.query('SELECT * FROM residents WHERE resident_id = ?', [id], callback);
 };
@@ -72,6 +91,7 @@ const remove = (id, callback) => {
 
 module.exports = {
     getAll,
+    getVaccinationReport,
     getById,
     create,
     update,
