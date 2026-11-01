@@ -1,158 +1,213 @@
-
 const Vaccine = require('../models/vaccine.model');
 
-function validId(id) {
-    return /^[1-9]\d*$/.test(String(id));
-}
-
-function validateVaccine(data) {
-    if (!data || typeof data.vaccine_name !== 'string' ||
-        !data.vaccine_name.trim() || data.vaccine_name.trim().length > 100) {
-        return 'vaccine_name is required (maximum 100 characters)';
+const checkVaccine = (data) => {
+    if (!data.vaccine_name || !data.total_doses_required) {
+        return 'vaccine_name and total_doses_required are required';
     }
 
-    if (!Number.isInteger(data.total_doses_required) ||
-        data.total_doses_required < 1) {
-        return 'total_doses_required must be a positive whole number';
+    if (data.total_doses_required < 1) {
+        return 'total_doses_required must be at least 1';
     }
 
-    if (data.description != null &&
-        (typeof data.description !== 'string' ||
-        data.description.length > 255)) {
-        return 'description must be text with 255 characters or fewer';
-    }
-
-    for (const field of ['storage_temp_min', 'storage_temp_max']) {
-        const value = data[field];
-
-        if (value != null &&
-            (typeof value !== 'number' || !Number.isFinite(value) ||
-            value < -999.9 || value > 999.9)) {
-            return `${field} must be a valid temperature number`;
-        }
-    }
-
-    if (data.storage_temp_min != null &&
-        data.storage_temp_max != null &&
-        data.storage_temp_min > data.storage_temp_max) {
+    if (
+        data.storage_temp_min !== undefined &&
+        data.storage_temp_max !== undefined &&
+        data.storage_temp_min > data.storage_temp_max
+    ) {
         return 'Minimum temperature cannot exceed maximum temperature';
     }
 
     return null;
-}
-
-function sendError(res, err) {
-    if (err.code === 'ER_DUP_ENTRY') {
-        return res.status(409).json({
-            message: 'Vaccine name already exists'
-        });
-    }
-
-    if (err.code === 'ER_ROW_IS_REFERENCED_2') {
-        return res.status(409).json({
-            message: 'Vaccine has related records'
-        });
-    }
-
-    console.error('Vaccine error:', err.code || err.message);
-    return res.status(500).json({ message: 'Server error' });
-}
-
-exports.getAll = async (req, res) => {
-    try {
-        const vaccines = await Vaccine.getAll();
-        return res.status(200).json(vaccines);
-    } catch (err) {
-        return sendError(res, err);
-    }
 };
 
-exports.getById = async (req, res) => {
-    if (!validId(req.params.id)) {
-        return res.status(400).json({ message: 'Invalid vaccine ID' });
-    }
+const getAll = (req, res) => {
+    Vaccine.getAll((err, results) => {
+        if (err) {
+            console.log('VACCINE ERROR:', err);
 
-    try {
-        const vaccine = await Vaccine.getById(req.params.id);
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
 
-        if (!vaccine) {
+        res.status(200).json(results);
+    });
+};
+
+const getById = (req, res) => {
+    Vaccine.getById(req.params.id, (err, results) => {
+        if (err) {
+            console.log('VACCINE ERROR:', err);
+
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        if (results.length === 0) {
             return res.status(404).json({
                 message: 'Vaccine not found'
             });
         }
 
-        return res.status(200).json(vaccine);
-    } catch (err) {
-        return sendError(res, err);
-    }
+        res.status(200).json(results[0]);
+    });
 };
 
-exports.create = async (req, res) => {
-    const data = req.body || {};
-    const error = validateVaccine(data);
+const create = (req, res) => {
+    const {
+        vaccine_name,
+        description,
+        total_doses_required,
+        storage_temp_min,
+        storage_temp_max
+    } = req.body;
 
-    if (error) {
-        return res.status(400).json({ message: error });
+    const data = {
+        vaccine_name,
+        description,
+        total_doses_required,
+        storage_temp_min,
+        storage_temp_max
+    };
+
+    const problem = checkVaccine(data);
+
+    if (problem) {
+        return res.status(400).json({
+            message: problem
+        });
     }
 
-    try {
-        const id = await Vaccine.create(data);
-        return res.status(201).json({
+    Vaccine.create(data, (err, result) => {
+        if (err) {
+            console.log('VACCINE ERROR:', err);
+
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.status(409).json({
+                    message: 'Vaccine name already exists'
+                });
+            }
+
+            if (
+                err.code === 'ER_DATA_TOO_LONG' ||
+                err.code === 'ER_TRUNCATED_WRONG_VALUE'
+            ) {
+                return res.status(400).json({
+                    message: 'Invalid data: check the values you sent'
+                });
+            }
+
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        res.status(201).json({
             message: 'Vaccine added',
-            vaccine_id: id
+            vaccine_id: result.insertId
         });
-    } catch (err) {
-        return sendError(res, err);
-    }
+    });
 };
 
-exports.update = async (req, res) => {
-    if (!validId(req.params.id)) {
-        return res.status(400).json({ message: 'Invalid vaccine ID' });
+const update = (req, res) => {
+    const {
+        vaccine_name,
+        description,
+        total_doses_required,
+        storage_temp_min,
+        storage_temp_max
+    } = req.body;
+
+    const data = {
+        vaccine_name,
+        description,
+        total_doses_required,
+        storage_temp_min,
+        storage_temp_max
+    };
+
+    const problem = checkVaccine(data);
+
+    if (problem) {
+        return res.status(400).json({
+            message: problem
+        });
     }
 
-    const data = req.body || {};
-    const error = validateVaccine(data);
+    Vaccine.update(req.params.id, data, (err, result) => {
+        if (err) {
+            console.log('VACCINE ERROR:', err);
 
-    if (error) {
-        return res.status(400).json({ message: error });
-    }
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.status(409).json({
+                    message: 'Vaccine name already exists'
+                });
+            }
 
-    try {
-        const updated = await Vaccine.update(req.params.id, data);
+            if (
+                err.code === 'ER_DATA_TOO_LONG' ||
+                err.code === 'ER_TRUNCATED_WRONG_VALUE'
+            ) {
+                return res.status(400).json({
+                    message: 'Invalid data: check the values you sent'
+                });
+            }
 
-        if (!updated) {
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        if (result.affectedRows === 0) {
             return res.status(404).json({
                 message: 'Vaccine not found'
             });
         }
 
-        return res.status(200).json({
+        res.status(200).json({
             message: 'Vaccine updated'
         });
-    } catch (err) {
-        return sendError(res, err);
-    }
+    });
 };
 
-exports.delete = async (req, res) => {
-    if (!validId(req.params.id)) {
-        return res.status(400).json({ message: 'Invalid vaccine ID' });
-    }
+const remove = (req, res) => {
+    Vaccine.delete(req.params.id, (err, result) => {
+        if (err) {
+            console.log('VACCINE ERROR:', err);
 
-    try {
-        const deleted = await Vaccine.delete(req.params.id);
+            if (err.code === 'ER_ROW_IS_REFERENCED_2') {
+                return res.status(409).json({
+                    message: 'Cannot delete: other records depend on this one'
+                });
+            }
 
-        if (!deleted) {
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        if (result.affectedRows === 0) {
             return res.status(404).json({
                 message: 'Vaccine not found'
             });
         }
 
-        return res.status(200).json({
+        res.status(200).json({
             message: 'Vaccine deleted'
         });
-    } catch (err) {
-        return sendError(res, err);
-    }
+    });
+};
+
+module.exports = {
+    getAll,
+    getById,
+    create,
+    update,
+    delete: remove
 };
