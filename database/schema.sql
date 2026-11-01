@@ -34,6 +34,16 @@ CREATE TABLE users (
     FOREIGN KEY (staff_id) REFERENCES medical_staff(staff_id)
 );
 
+-- == ANGELIQUE ==
+
+CREATE TABLE households (
+    household_id   INT          AUTO_INCREMENT PRIMARY KEY,
+    zone_id        INT          NOT NULL,
+    household_name VARCHAR(100) NOT NULL,
+    address        VARCHAR(255),
+    FOREIGN KEY (zone_id) REFERENCES barangay_zones(zone_id)
+);
+
 -- == CHRIST JOHN ==
 
 CREATE TABLE residents (
@@ -59,6 +69,46 @@ CREATE TABLE vaccines (
     total_doses_required INT          NOT NULL,
     storage_temp_min     DECIMAL(4,1),
     storage_temp_max     DECIMAL(4,1)
+);
+
+-- == VINCE ==
+
+CREATE TABLE health_equipment (
+    equipment_id          INT          AUTO_INCREMENT PRIMARY KEY,
+    equipment_name        VARCHAR(100) NOT NULL,
+    equipment_type        VARCHAR(50)  NOT NULL,
+    location              VARCHAR(100),
+    min_temp              DECIMAL(4,1),
+    max_temp              DECIMAL(4,1),
+    status                VARCHAR(25)  NOT NULL,
+    last_maintenance_date DATE
+);
+
+-- == JOSEPH ==
+
+CREATE TABLE immunization_milestones (
+    milestone_id         INT          AUTO_INCREMENT PRIMARY KEY,
+    vaccine_id           INT          NOT NULL,
+    dose_number          INT          NOT NULL,
+    recommended_age_days INT          NOT NULL,
+    min_interval_days    INT          NOT NULL,
+    notes                VARCHAR(255),
+    UNIQUE (vaccine_id, dose_number),
+    FOREIGN KEY (vaccine_id) REFERENCES vaccines(vaccine_id)
+);
+
+CREATE TABLE vaccine_batches (
+    batch_id           INT          AUTO_INCREMENT PRIMARY KEY,
+    vaccine_id         INT          NOT NULL,
+    equipment_id       INT          NOT NULL,
+    batch_number       VARCHAR(50)  NOT NULL UNIQUE,
+    quantity_received  INT          NOT NULL,
+    quantity_remaining INT          NOT NULL,
+    received_date      DATE         NOT NULL,
+    expiry_date        DATE         NOT NULL,
+    status             VARCHAR(20)  NOT NULL,
+    FOREIGN KEY (vaccine_id)   REFERENCES vaccines(vaccine_id),
+    FOREIGN KEY (equipment_id) REFERENCES health_equipment(equipment_id)
 );
 
 -- == IAN ==
@@ -112,31 +162,6 @@ CREATE TABLE vaccination_records (
 
 -- == JOSEPH ==
 
-CREATE TABLE immunization_milestones (
-    milestone_id         INT          AUTO_INCREMENT PRIMARY KEY,
-    vaccine_id           INT          NOT NULL,
-    dose_number          INT          NOT NULL,
-    recommended_age_days INT          NOT NULL,
-    min_interval_days    INT          NOT NULL,
-    notes                VARCHAR(255),
-    UNIQUE (vaccine_id, dose_number),
-    FOREIGN KEY (vaccine_id) REFERENCES vaccines(vaccine_id)
-);
-
-CREATE TABLE vaccine_batches (
-    batch_id           INT          AUTO_INCREMENT PRIMARY KEY,
-    vaccine_id         INT          NOT NULL,
-    equipment_id       INT          NOT NULL,
-    batch_number       VARCHAR(50)  NOT NULL UNIQUE,
-    quantity_received  INT          NOT NULL,
-    quantity_remaining INT          NOT NULL,
-    received_date      DATE         NOT NULL,
-    expiry_date        DATE         NOT NULL,
-    status             VARCHAR(20)  NOT NULL,
-    FOREIGN KEY (vaccine_id)   REFERENCES vaccines(vaccine_id),
-    FOREIGN KEY (equipment_id) REFERENCES health_equipment(equipment_id)
-);
-
 CREATE TABLE inventory_stock_movements (
     movement_id   INT          AUTO_INCREMENT PRIMARY KEY,
     batch_id      INT          NOT NULL,
@@ -150,17 +175,6 @@ CREATE TABLE inventory_stock_movements (
 );
 
 -- == VINCE ==
-
-CREATE TABLE health_equipment (
-    equipment_id          INT          AUTO_INCREMENT PRIMARY KEY,
-    equipment_name        VARCHAR(100) NOT NULL,
-    equipment_type        VARCHAR(50)  NOT NULL,
-    location              VARCHAR(100),
-    min_temp              DECIMAL(4,1),
-    max_temp              DECIMAL(4,1),
-    status                VARCHAR(25)  NOT NULL,
-    last_maintenance_date DATE
-);
 
 CREATE TABLE temperature_logs (
     log_id              INT          AUTO_INCREMENT PRIMARY KEY,
@@ -188,14 +202,6 @@ CREATE TABLE alerts (
 
 -- == ANGELIQUE ==
 
-CREATE TABLE households (
-    household_id   INT          AUTO_INCREMENT PRIMARY KEY,
-    zone_id        INT          NOT NULL,
-    household_name VARCHAR(100) NOT NULL,
-    address        VARCHAR(255),
-    FOREIGN KEY (zone_id) REFERENCES barangay_zones(zone_id)
-);
-
 CREATE TABLE adverse_events (
     event_id    INT          AUTO_INCREMENT PRIMARY KEY,
     record_id   INT          NOT NULL,
@@ -208,6 +214,5 @@ CREATE TABLE adverse_events (
     FOREIGN KEY (record_id)   REFERENCES vaccination_records(record_id),
     FOREIGN KEY (reported_by) REFERENCES medical_staff(staff_id)
 );
-
 
 SET FOREIGN_KEY_CHECKS = 1;
