@@ -19,6 +19,13 @@ INSERT INTO users (user_id, staff_id, username, password_hash, role, is_active, 
 (2, 2, 'Cra_iner8', 'PLACEHOLDER_HASH_2', 'Nurse', TRUE, '2026-10-01 08:30:00'),
 (3, 3, 'Thea<3', 'PLACEHOLDER_HASH_3', 'Nurse', TRUE, '2026-10-01 09:00:00');
 
+-- == ANGELIQUE ==
+
+INSERT INTO households (household_id, zone_id, household_name, address) VALUES
+(1, 1, 'Anqui Household', 'Purok 4, Obogon, Tanjay City'),
+(2, 2, 'Alvaredi Household', 'Purok 2, Pamplona, Negros Oriental'),
+(3, 3, 'Balaora Household', 'Purok 1, Sibulan, Negros Oriental');
+
 -- == CHRIST JOHN ==
 
 INSERT INTO residents (resident_id, household_id, zone_id, first_name, middle_name, last_name, birthdate, gender, address, contact_number, created_at) VALUES
@@ -31,6 +38,26 @@ INSERT INTO vaccines (vaccine_id, vaccine_name, description, total_doses_require
 (2, 'Hepatitis B', 'Vaccine for protection against Hepatitis B', 3, 2.0, 8.0),
 (3, 'Pentavalent', 'Vaccine against five infectious diseases', 3, 2.0, 8.0),
 (4, 'Influenza', 'Seasonal flu vaccine', 1, 2.0, 8.0);
+
+-- == VINCE ==
+
+INSERT INTO health_equipment (equipment_id, equipment_name, equipment_type, location, min_temp, max_temp, status, last_maintenance_date) VALUES
+(1, 'Vaccine Refrigerator A', 'Refrigerator', 'Main Health Center - Room 101', 2.0, 8.0, 'Operational', '2026-09-01'),
+(2, 'Cold Chain Portable Cooler', 'Portable Cooler', 'Outreach Vehicle 1', 2.0, 8.0, 'Operational', '2026-10-10');
+
+-- == JOSEPH ==
+
+INSERT INTO immunization_milestones (milestone_id, vaccine_id, dose_number, recommended_age_days, min_interval_days, notes) VALUES
+(1, 2, 1, 0, 0, 'Dose 1 administered at birth'),
+(2, 2, 2, 30, 28, 'Dose 2 administered after 4 weeks'),
+(3, 2, 3, 180, 60, 'Dose 3 administered after 6 months'),
+(4, 4, 1, 365, 0, 'Annual seasonal dose');
+
+INSERT INTO vaccine_batches (batch_id, vaccine_id, equipment_id, batch_number, quantity_received, quantity_remaining, received_date, expiry_date, status) VALUES
+(1, 2, 1, 'HB-2026-001', 100, 84, '2026-09-01', '2027-09-01', 'Available'),
+(2, 2, 1, 'HB-2026-002', 50, 50, '2026-10-01', '2027-04-01', 'Available'),
+(3, 4, 1, 'FLU-2026-99', 80, 60, '2026-09-15', '2027-03-15', 'Available'),
+(4, 4, 1, 'FLU-2026-01', 40, 40, '2026-06-01', '2026-11-20', 'Available');
 
 -- == IAN ==
 
@@ -50,18 +77,6 @@ INSERT INTO vaccination_records (record_id, resident_id, batch_id, staff_id, mil
 
 -- == JOSEPH ==
 
-INSERT INTO immunization_milestones (milestone_id, vaccine_id, dose_number, recommended_age_days, min_interval_days, notes) VALUES
-(1, 2, 1, 0, 0, 'Dose 1 administered at birth'),
-(2, 2, 2, 30, 28, 'Dose 2 administered after 4 weeks'),
-(3, 2, 3, 180, 60, 'Dose 3 administered after 6 months'),
-(4, 4, 1, 365, 0, 'Annual seasonal dose');
-
-INSERT INTO vaccine_batches (batch_id, vaccine_id, equipment_id, batch_number, quantity_received, quantity_remaining, received_date, expiry_date, status) VALUES
-(1, 2, 1, 'HB-2026-001', 100, 84, '2026-09-01', '2027-09-01', 'Available'),
-(2, 2, 1, 'HB-2026-002', 50, 50, '2026-10-01', '2027-04-01', 'Available'),
-(3, 4, 1, 'FLU-2026-99', 80, 60, '2026-09-15', '2027-03-15', 'Available'),
-(4, 4, 1, 'FLU-2026-01', 40, 40, '2026-06-01', '2026-11-20', 'Available');
-
 INSERT INTO inventory_stock_movements (movement_id, batch_id, staff_id, movement_type, quantity, remarks, movement_date) VALUES
 (1, 1, 2, 'Delivery', 100, 'Initial delivery from DOH central warehouse', '2026-09-01 08:30:00'),
 (2, 1, 2, 'Administered', 15, 'Doses administered during morning immunization session', '2026-10-15 12:00:00'),
@@ -72,10 +87,6 @@ INSERT INTO inventory_stock_movements (movement_id, batch_id, staff_id, movement
 (7, 4, 2, 'Delivery', 40, 'Delivery from DOH central warehouse', '2026-06-01 08:30:00');
 
 -- == VINCE ==
-
-INSERT INTO health_equipment (equipment_id, equipment_name, equipment_type, location, min_temp, max_temp, status, last_maintenance_date) VALUES
-(1, 'Vaccine Refrigerator A', 'Refrigerator', 'Main Health Center - Room 101', 2.0, 8.0, 'Operational', '2026-09-01'),
-(2, 'Cold Chain Portable Cooler', 'Portable Cooler', 'Outreach Vehicle 1', 2.0, 8.0, 'Operational', '2026-10-10');
 
 INSERT INTO temperature_logs (log_id, equipment_id, recorded_by, temperature_celsius, is_out_of_range, recorded_at) VALUES
 (1, 1, 2, 4.2, FALSE, '2026-10-31 08:00:00'),
@@ -91,11 +102,6 @@ INSERT INTO alerts (alert_id, assigned_to, alert_type, severity, message, relate
  2, 'Open', '2026-10-31 08:00:00', NULL);
 
 -- == ANGELIQUE ==
-
-INSERT INTO households (household_id, zone_id, household_name, address) VALUES
-(1, 1, 'Anqui Household', 'Purok 4, Obogon, Tanjay City'),
-(2, 2, 'Alvaredi Household', 'Purok 2, Pamplona, Negros Oriental'),
-(3, 3, 'Balaora Household', 'Purok 1, Sibulan, Negros Oriental');
 
 INSERT INTO adverse_events (event_id, record_id, reported_by, severity, description, onset_date, outcome, reported_at) VALUES
 (1, 1, 2, 'Mild',
