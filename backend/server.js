@@ -43,6 +43,12 @@ const milestoneRoutes = require('./routes/immunizationMilestone.routes');
 
 // Vince
 
+ const equipmentRoutes = require('./routes/healthEquipment.routes');
+ const temperatureRoutes = require('./routes/temperatureLog.routes');
+ const alertRoutes = require('./routes/alert.routes');
+ app.use('/api/equipment', equipmentRoutes);
+ app.use('/api/temperature-logs', temperatureRoutes);
+ app.use('/api/alerts', alertRoutes);
 
 
 // Angelique
