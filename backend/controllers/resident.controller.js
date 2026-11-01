@@ -15,6 +15,21 @@ const getAll = (req, res) => {
     });
 };
 
+// Resident vaccination report
+const getVaccinationReport = (req, res) => {
+    Resident.getVaccinationReport((err, results) => {
+        if (err) {
+            console.error('RESIDENT REPORT ERROR:', err);
+
+            return res.status(500).json({
+                message: 'Failed to get vaccination report'
+            });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
 const getById = (req, res) => {
     Resident.getById(req.params.id, (err, results) => {
         if (err) {
@@ -215,6 +230,7 @@ const remove = (req, res) => {
 
 module.exports = {
     getAll,
+    getVaccinationReport,
     getById,
     create,
     update,
