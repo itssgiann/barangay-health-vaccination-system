@@ -40,7 +40,8 @@ app.use(express.static('../frontend'));
 
 // Angelique
 
-
+const householdRoutes = require('./routes/household.routes');
+app.use('/api/households', householdRoutes);
 
 
 app.get('/', (req, res) => {
