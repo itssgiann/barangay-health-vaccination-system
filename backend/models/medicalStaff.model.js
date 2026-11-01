@@ -1,50 +1,73 @@
 const db = require('../config/db');
 
-const MedicalStaff = {
+const getAll = (callback) => {
+    db.query('SELECT * FROM medical_staff', callback);
+};
 
-    getAll: async () => {
-        const [rows] = await db.query('SELECT * FROM medical_staff');
-        return rows;
-    },
+const getById = (id, callback) => {
+    db.query('SELECT * FROM medical_staff WHERE staff_id = ?', [id], callback);
+};
 
-    getById: async (id) => {
-        const [rows] = await db.query(
-            'SELECT * FROM medical_staff WHERE staff_id = ?',
-            [id]
-        );
-        return rows[0];
-    },
+const create = (data, callback) => {
+    const sql = `
+        INSERT INTO medical_staff
+        (zone_id, first_name, last_name, staff_role, license_number,
+        contact_number, is_active)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
 
-    create: async (data) => {
-        const sql = `
-            INSERT INTO medical_staff
-            (zone_id, first_name, last_name, staff_role,
-            license_number, contact_number, is_active)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `;
-
-        const values = [
+    db.query(
+        sql,
+        [
             data.zone_id,
             data.first_name,
             data.last_name,
             data.staff_role,
             data.license_number,
             data.contact_number,
-            data.is_active ?? true
-        ];
-
-        const [result] = await db.query(sql, values);
-        return result.insertId;
-    },
-
-    delete: async (id) => {
-        const [result] = await db.query(
-            'DELETE FROM medical_staff WHERE staff_id = ?',
-            [id]
-        );
-        return result.affectedRows;
-    }
-
+            data.is_active === undefined ? true : data.is_active
+        ],
+        callback
+    );
 };
 
-module.exports = MedicalStaff;
+const update = (id, data, callback) => {
+    const sql = `
+        UPDATE medical_staff
+        SET zone_id = ?,
+            first_name = ?,
+            last_name = ?,
+            staff_role = ?,
+            license_number = ?,
+            contact_number = ?,
+            is_active = ?
+        WHERE staff_id = ?
+    `;
+
+    db.query(
+        sql,
+        [
+            data.zone_id,
+            data.first_name,
+            data.last_name,
+            data.staff_role,
+            data.license_number,
+            data.contact_number,
+            data.is_active === undefined ? true : data.is_active,
+            id
+        ],
+        callback
+    );
+};
+
+const remove = (id, callback) => {
+    db.query('DELETE FROM medical_staff WHERE staff_id = ?', [id], callback);
+};
+
+module.exports = {
+    getAll,
+    getById,
+    create,
+    update,
+    delete: remove
+};
