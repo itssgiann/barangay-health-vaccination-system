@@ -5,7 +5,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- == A - GIAN ==
 
-NSERT INTO barangay_zones (zone_id, zone_name, description) VALUES
+INSERT INTO barangay_zones (zone_id, zone_name, description) VALUES
 (1, 'Purok 4 - Obogon', 'Front of Health Center, Tanjay City'),
 (2, 'Purok 2 - Pamplona', 'Near Baptist Church, Main Pamplona '),
 (3, 'Purok 1 - Sibulan', 'Left side of the park, Sibulan Main');
@@ -50,9 +50,22 @@ INSERT INTO vaccination_records (record_id, resident_id, batch_id, staff_id, mil
 
 -- == E - VINCE ==
 
+INSERT INTO health_equipment (equipment_id, equipment_name, equipment_type, location, min_temp, max_temp, status, last_maintenance_date) VALUES
+(1, 'Vaccine Refrigerator A', 'Refrigerator', 'Main Health Center - Room 101', 2.0, 8.0, 'Operational', '2026-09-01'),
+(2, 'Cold Chain Portable Cooler', 'Portable Cooler', 'Outreach Vehicle 1', 2.0, 8.0, 'Operational', '2026-10-10');
 
+INSERT INTO temperature_logs (log_id, equipment_id, recorded_by, temperature_celsius, is_out_of_range, recorded_at) VALUES
+(1, 1, 2, 4.2, FALSE, '2026-10-31 08:00:00'),
+(2, 1, 2, 4.5, FALSE, '2026-10-31 12:00:00'),
+(3, 1, 2, 9.1, TRUE, '2026-10-31 16:00:00');
 
-
+INSERT INTO alerts (alert_id, assigned_to, alert_type, severity, message, related_id, status, created_at, resolved_at) VALUES
+(1, 1, 'Temperature_Breach', 'Severe',
+ 'Vaccine Refrigerator A exceeded 8.0C (recorded 9.1C)',
+ 1, 'Open', '2026-10-31 16:05:00', NULL),
+(2, 2, 'Near_Expiry', 'Moderate',
+ 'Batch HB-2026-002 reaches expiry within 180 days',
+ 2, 'Open', '2026-10-31 08:00:00', NULL);
 
 -- == F - ANGELIQUE ==
 
