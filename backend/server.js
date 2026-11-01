@@ -53,10 +53,3 @@ const adverseEventRoutes = require('./routes/adverseEvent.routes');
 app.use('/api/households', householdRoutes);
 app.use('/api/adverse-events', adverseEventRoutes);
 
-app.get('/', (req, res) => {
-    res.send('Barangay Healthcare & Vaccination System Backend is Running!');
-});
-
-app.listen(process.env.PORT || 5000, () => {
-    console.log('Server running on port 5000');
-});
