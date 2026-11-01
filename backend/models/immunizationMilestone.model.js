@@ -26,4 +26,4 @@ const ImmunizationMilestone = {
     }
 };
 
-module.exports = ImmunizationMilestone;
+module.exports = ImmunizationMilestone; 
