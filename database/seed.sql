@@ -44,8 +44,21 @@ INSERT INTO vaccination_records (record_id, resident_id, batch_id, staff_id, mil
 
 -- == D - JOSEPH ==
 
+INSERT INTO immunization_milestones (milestone_id, vaccine_id, dose_number, recommended_age_days, min_interval_days, notes) VALUES
+(1, 2, 1, 0, 0, 'Dose 1 administered at birth'),
+(2, 2, 2, 30, 28, 'Dose 2 administered after 4 weeks'),
+(3, 2, 3, 180, 60, 'Dose 3 administered after 6 months'),
+(4, 4, 1, 365, 0, 'Annual seasonal dose');
 
+INSERT INTO vaccine_batches (batch_id, vaccine_id, equipment_id, batch_number, quantity_received, quantity_remaining, received_date, expiry_date, status) VALUES
+(1, 2, 1, 'HB-2026-001', 100, 85, '2026-09-01', '2027-09-01', 'Available'),
+(2, 2, 1, 'HB-2026-002', 50, 50, '2026-10-01', '2027-04-01', 'Available'),
+(3, 4, 1, 'FLU-2026-99', 80, 60, '2026-09-15', '2027-03-15', 'Available');
 
+INSERT INTO inventory_stock_movements (movement_id, batch_id, staff_id, movement_type, quantity, remarks, movement_date) VALUES
+(1, 1, 2, 'Delivery', 100, 'Initial delivery from DOH central warehouse', '2026-09-01 08:30:00'),
+(2, 1, 2, 'Administered', 15, 'Doses administered during morning immunization session', '2026-10-15 12:00:00'),
+(3, 3, 2, 'Administered', 20, 'Senior flu drive administration', '2026-10-20 13:00:00');
 
 
 -- == E - VINCE ==
