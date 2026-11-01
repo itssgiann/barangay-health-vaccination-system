@@ -47,4 +47,4 @@ const remove = (id, callback) => {
     db.query('DELETE FROM adverse_events WHERE event_id = ?', [id], callback);
 };
 
-module.exports = { getAll, getById, create, update, delete: remove };
+module.exports = { getAll, getById, create, update, getAdverseEventsWithResidentDetails, delete: remove };
