@@ -1,64 +1,67 @@
+
 const db = require('../config/db');
 
-const getAll = (callback) => {
-    db.query('SELECT * FROM vaccines ORDER BY vaccine_id', callback);
-};
+const Vaccine = {
+    getAll: async () => {
+        const [rows] = await db.promise().query(
+            'SELECT * FROM vaccines ORDER BY vaccine_id'
+        );
+        return rows;
+    },
 
-const getById = (id, callback) => {
-    db.query('SELECT * FROM vaccines WHERE vaccine_id = ?', [id], callback);
-};
+    getById: async (id) => {
+        const [rows] = await db.promise().query(
+            'SELECT * FROM vaccines WHERE vaccine_id = ?',
+            [id]
+        );
+        return rows[0];
+    },
 
-const create = (data, callback) => {
-    const sql = `
-        INSERT INTO vaccines
-        (vaccine_name, description, total_doses_required,
-        storage_temp_min, storage_temp_max)
-        VALUES (?, ?, ?, ?, ?)
-    `;
+    create: async (data) => {
+        const sql = `INSERT INTO vaccines
+            (vaccine_name, description, total_doses_required,
+             storage_temp_min, storage_temp_max)
+            VALUES (?, ?, ?, ?, ?)`;
 
-    db.query(
-        sql,
-        [
-            data.vaccine_name,
-            data.description,
+        const values = [
+            data.vaccine_name.trim(),
+            data.description ?? null,
             data.total_doses_required,
-            data.storage_temp_min,
-            data.storage_temp_max
-        ],
-        callback
-    );
-};
+            data.storage_temp_min ?? null,
+            data.storage_temp_max ?? null
+        ];
 
-const update = (id, data, callback) => {
-    const sql = `
-        UPDATE vaccines
-        SET vaccine_name = ?, description = ?, total_doses_required = ?,
-        storage_temp_min = ?, storage_temp_max = ?
-        WHERE vaccine_id = ?
-    `;
+        const [result] = await db.promise().query(sql, values);
+        return result.insertId;
+    },
 
-    db.query(
-        sql,
-        [
-            data.vaccine_name,
-            data.description,
+    update: async (id, data) => {
+        const sql = `UPDATE vaccines SET
+            vaccine_name = ?, description = ?,
+            total_doses_required = ?, storage_temp_min = ?,
+            storage_temp_max = ?
+            WHERE vaccine_id = ?`;
+
+        const values = [
+            data.vaccine_name.trim(),
+            data.description ?? null,
             data.total_doses_required,
-            data.storage_temp_min,
-            data.storage_temp_max,
+            data.storage_temp_min ?? null,
+            data.storage_temp_max ?? null,
             id
-        ],
-        callback
-    );
+        ];
+
+        const [result] = await db.promise().query(sql, values);
+        return result.affectedRows;
+    },
+
+    delete: async (id) => {
+        const [result] = await db.promise().query(
+            'DELETE FROM vaccines WHERE vaccine_id = ?',
+            [id]
+        );
+        return result.affectedRows;
+    }
 };
 
-const remove = (id, callback) => {
-    db.query('DELETE FROM vaccines WHERE vaccine_id = ?', [id], callback);
-};
-
-module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    delete: remove
-};
+module.exports = Vaccine;

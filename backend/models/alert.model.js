@@ -1,74 +1,51 @@
 const db = require('../config/db');
 
-const getAll = (callback) => {
-    db.query('SELECT * FROM alerts', callback);
-};
+const Alert = {
 
-const getById = (id, callback) => {
-    db.query('SELECT * FROM alerts WHERE alert_id = ?', [id], callback);
-};
+    getAll: async () => {
+        const [rows] = await db.query('SELECT * FROM alerts');
+        return rows;
+    },
 
-const create = (data, callback) => {
-    const sql = `
-        INSERT INTO alerts
-        (assigned_to, alert_type, severity, message, related_id,
-        status, created_at, resolved_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+    getById: async (id) => {
+        const [rows] = await db.query(
+            'SELECT * FROM alerts WHERE alert_id = ?',
+            [id]
+        );
+        return rows[0];
+    },
 
-    db.query(
-        sql,
-        [
+    create: async (data) => {
+        const sql = `
+            INSERT INTO alerts
+            (assigned_to, alert_type, severity, message,
+            related_id, status, created_at, resolved_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        const values = [
             data.assigned_to,
             data.alert_type,
             data.severity,
             data.message,
             data.related_id,
             data.status,
-            data.created_at || new Date(),
+            data.created_at,
             data.resolved_at
-        ],
-        callback
-    );
+        ];
+
+        const [result] = await db.query(sql, values);
+        return result.insertId;
+    },
+
+    delete: async (id) => {
+        const [result] = await db.query(
+            'DELETE FROM alerts WHERE alert_id = ?',
+            [id]
+        );
+        return result.affectedRows;
+    }
+
 };
 
-const update = (id, data, callback) => {
-    const sql = `
-        UPDATE alerts
-        SET assigned_to = ?,
-            alert_type = ?,
-            severity = ?,
-            message = ?,
-            related_id = ?,
-            status = ?,
-            resolved_at = ?
-        WHERE alert_id = ?
-    `;
-
-    db.query(
-        sql,
-        [
-            data.assigned_to,
-            data.alert_type,
-            data.severity,
-            data.message,
-            data.related_id,
-            data.status,
-            data.resolved_at,
-            id
-        ],
-        callback
-    );
-};
-
-const remove = (id, callback) => {
-    db.query('DELETE FROM alerts WHERE alert_id = ?', [id], callback);
-};
-
-module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    delete: remove
-};
+module.exports = Alert;

@@ -1,206 +1,39 @@
 const Appointment = require('../models/appointment.model');
 
-const getAll = (req, res) => {
-    Appointment.getAll((err, results) => {
-        if (err) {
-            console.log('APPOINTMENT ERROR:', err);
-
-            return res.status(500).json({
-                message: 'Database error',
-                error: err.message
-            });
-        }
-
-        res.status(200).json(results);
-    });
-};
-
-const getById = (req, res) => {
-    Appointment.getById(req.params.id, (err, results) => {
-        if (err) {
-            console.log('APPOINTMENT ERROR:', err);
-
-            return res.status(500).json({
-                message: 'Database error',
-                error: err.message
-            });
-        }
-
-        if (results.length === 0) {
-            return res.status(404).json({
-                message: 'Appointment not found'
-            });
-        }
-
-        res.status(200).json(results[0]);
-    });
-};
-
-const create = (req, res) => {
-    const {
-        resident_id,
-        vaccine_id,
-        staff_id,
-        dose_number,
-        scheduled_date,
-        status,
-        notes
-    } = req.body;
-
-    if (
-        !resident_id ||
-        !vaccine_id ||
-        !staff_id ||
-        !dose_number ||
-        !scheduled_date
-    ) {
-        return res.status(400).json({
-            message: 'resident_id, vaccine_id, staff_id, dose_number and scheduled_date are required'
-        });
+exports.getAll = async (req, res) => {
+    try {
+        const list = await Appointment.getAll();
+        res.status(200).json(list);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    Appointment.create(
-        {
-            resident_id,
-            vaccine_id,
-            staff_id,
-            dose_number,
-            scheduled_date,
-            status,
-            notes
-        },
-        (err, result) => {
-            if (err) {
-                console.log('APPOINTMENT ERROR:', err);
-
-                if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-                    return res.status(400).json({
-                        message: 'Invalid reference: a related record does not exist'
-                    });
-                }
-
-                if (
-                    err.code === 'ER_DATA_TOO_LONG' ||
-                    err.code === 'ER_TRUNCATED_WRONG_VALUE'
-                ) {
-                    return res.status(400).json({
-                        message: 'Invalid data: check the values you sent'
-                    });
-                }
-
-                return res.status(500).json({
-                    message: 'Database error',
-                    error: err.message
-                });
-            }
-
-            res.status(201).json({
-                message: 'Appointment scheduled',
-                appointment_id: result.insertId
-            });
-        }
-    );
 };
 
-const update = (req, res) => {
-    const {
-        resident_id,
-        vaccine_id,
-        staff_id,
-        dose_number,
-        scheduled_date,
-        status,
-        notes
-    } = req.body;
-
-    if (
-        !resident_id ||
-        !vaccine_id ||
-        !staff_id ||
-        !dose_number ||
-        !scheduled_date
-    ) {
-        return res.status(400).json({
-            message: 'resident_id, vaccine_id, staff_id, dose_number and scheduled_date are required'
-        });
+exports.getById = async (req, res) => {
+    try {
+        const item = await Appointment.getById(req.params.id);
+        if (!item) return res.status(404).json({ message: 'Appointment not found' });
+        res.status(200).json(item);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    Appointment.update(
-        req.params.id,
-        {
-            resident_id,
-            vaccine_id,
-            staff_id,
-            dose_number,
-            scheduled_date,
-            status,
-            notes
-        },
-        (err, result) => {
-            if (err) {
-                console.log('APPOINTMENT ERROR:', err);
-
-                if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-                    return res.status(400).json({
-                        message: 'Invalid reference: a related record does not exist'
-                    });
-                }
-
-                if (
-                    err.code === 'ER_DATA_TOO_LONG' ||
-                    err.code === 'ER_TRUNCATED_WRONG_VALUE'
-                ) {
-                    return res.status(400).json({
-                        message: 'Invalid data: check the values you sent'
-                    });
-                }
-
-                return res.status(500).json({
-                    message: 'Database error',
-                    error: err.message
-                });
-            }
-
-            if (result.affectedRows === 0) {
-                return res.status(404).json({
-                    message: 'Appointment not found'
-                });
-            }
-
-            res.status(200).json({
-                message: 'Appointment updated'
-            });
-        }
-    );
 };
 
-const remove = (req, res) => {
-    Appointment.delete(req.params.id, (err, result) => {
-        if (err) {
-            console.log('APPOINTMENT ERROR:', err);
-
-            return res.status(500).json({
-                message: 'Database error',
-                error: err.message
-            });
-        }
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({
-                message: 'Appointment not found'
-            });
-        }
-
-        res.status(200).json({
-            message: 'Appointment deleted'
-        });
-    });
+exports.create = async (req, res) => {
+    try {
+        const newId = await Appointment.create(req.body);
+        res.status(201).json({ message: 'Appointment scheduled', appointment_id: newId });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
-module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    delete: remove
+exports.delete = async (req, res) => {
+    try {
+        const deleted = await Appointment.delete(req.params.id);
+        if (!deleted) return res.status(404).json({ message: 'Appointment not found' });
+        res.status(200).json({ message: 'Appointment deleted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
