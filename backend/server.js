@@ -48,8 +48,10 @@ const milestoneRoutes = require('./routes/immunizationMilestone.routes');
 // Angelique
 
 const householdRoutes = require('./routes/household.routes');
-app.use('/api/households', householdRoutes);
+const adverseEventRoutes = require('./routes/adverseEvent.routes');
 
+app.use('/api/households', householdRoutes);
+app.use('/api/adverse-events', adverseEventRoutes);
 
 app.get('/', (req, res) => {
     res.send('Barangay Healthcare & Vaccination System Backend is Running!');
