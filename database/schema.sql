@@ -1,8 +1,7 @@
-CREATE DATABASE barangay_vaccination_system;
+CREATE DATABASE IF NOT EXISTS barangay_vaccination_system;
 USE barangay_vaccination_system;
 
 SET FOREIGN_KEY_CHECKS = 0;
-
 
 -- == GIAN ==
 
@@ -35,7 +34,6 @@ CREATE TABLE users (
     FOREIGN KEY (staff_id) REFERENCES medical_staff(staff_id)
 );
 
-
 -- == CHRIST JOHN ==
 
 CREATE TABLE residents (
@@ -62,8 +60,6 @@ CREATE TABLE vaccines (
     storage_temp_min     DECIMAL(4,1),
     storage_temp_max     DECIMAL(4,1)
 );
-
-
 
 -- == IAN ==
 
@@ -114,7 +110,6 @@ CREATE TABLE vaccination_records (
     FOREIGN KEY (milestone_id) REFERENCES immunization_milestones(milestone_id)
 );
 
-
 -- == JOSEPH ==
 
 CREATE TABLE immunization_milestones (
@@ -154,7 +149,6 @@ CREATE TABLE inventory_stock_movements (
     FOREIGN KEY (staff_id) REFERENCES medical_staff(staff_id)
 );
 
-
 -- == VINCE ==
 
 CREATE TABLE health_equipment (
@@ -191,7 +185,6 @@ CREATE TABLE alerts (
     resolved_at DATETIME,
     FOREIGN KEY (assigned_to) REFERENCES medical_staff(staff_id)
 );
-
 
 -- == ANGELIQUE ==
 
