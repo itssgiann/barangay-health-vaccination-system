@@ -15,6 +15,21 @@ const getAll = (req, res) => {
     });
 };
 
+const getWithZones = (req, res) => {
+    MedicalStaff.getWithZones((err, results) => {
+        if (err) {
+            console.log('STAFF ERROR:', err);
+
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
 const getById = (req, res) => {
     MedicalStaff.getById(req.params.id, (err, results) => {
         if (err) {
@@ -206,6 +221,7 @@ const remove = (req, res) => {
 module.exports = {
     getAll,
     getById,
+    getWithZones,
     create,
     update,
     delete: remove

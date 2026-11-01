@@ -60,6 +60,23 @@ const update = (id, data, callback) => {
     );
 };
 
+const getWithZones = (callback) => {
+    const sql = `
+        SELECT
+            ms.staff_id,
+            ms.first_name,
+            ms.last_name,
+            ms.staff_role,
+            bz.zone_name
+        FROM medical_staff ms
+        INNER JOIN barangay_zones bz
+            ON ms.zone_id = bz.zone_id
+        ORDER BY ms.staff_id
+    `;
+
+    db.query(sql, callback);
+};
+
 const remove = (id, callback) => {
     db.query('DELETE FROM medical_staff WHERE staff_id = ?', [id], callback);
 };
@@ -67,6 +84,7 @@ const remove = (id, callback) => {
 module.exports = {
     getAll,
     getById,
+    getWithZones,
     create,
     update,
     delete: remove
