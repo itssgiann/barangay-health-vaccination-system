@@ -28,6 +28,8 @@ app.use(express.static('../frontend'));
 
 
 // Vince
+const equipmentRoutes = require('./routes/healthEquipment.routes');
+app.use('/api/health-equipment', equipmentRoutes);
 
 
 
