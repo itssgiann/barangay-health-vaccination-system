@@ -19,6 +19,11 @@ app.use(express.static('../frontend'));
 
 // Christ John
 
+const residentRoutes = require('./routes/resident.routes');
+const vaccineRoutes = require('./routes/vaccine.routes');
+
+app.use('/api/residents', residentRoutes);
+app.use('/api/vaccines', vaccineRoutes);
 
 
 // Ian
