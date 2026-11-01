@@ -8,12 +8,14 @@ app.use(express.json());
 app.use(express.static('../frontend'));
 
 // Gian
-// const zoneRoutes = require('./routes/barangayZone.routes');
-// const staffRoutes = require('./routes/medicalStaff.routes');
-// const userRoutes = require('./routes/user.routes');
-// app.use('/api/zones', zoneRoutes);
-// app.use('/api/staff', staffRoutes);
-// app.use('/api/users', userRoutes);
+
+ const zoneRoutes = require('./routes/barangayZone.routes');
+ const staffRoutes = require('./routes/medicalStaff.routes');
+ const userRoutes = require('./routes/user.routes');
+ app.use('/api/zones', zoneRoutes);
+ app.use('/api/staff', staffRoutes);
+ app.use('/api/users', userRoutes);
+
 
 // Christ John
 
@@ -21,15 +23,18 @@ app.use(express.static('../frontend'));
 
 // Ian
 
+ const appointmentRoutes = require('./routes/appointment.routes');
+ const consultationRoutes = require('./routes/consultation.routes');
+ const vaccinationRecordRoutes = require('./routes/vaccinationRecord.routes');
+ app.use('/api/appointments', appointmentRoutes);
+ app.use('/api/consultations', consultationRoutes);
+ app.use('/api/vaccination-records', vaccinationRecordRoutes);
 
-
-
+ 
 // Joseph
 
 
 // Vince
-const equipmentRoutes = require('./routes/healthEquipment.routes');
-app.use('/api/health-equipment', equipmentRoutes);
 
 
 
