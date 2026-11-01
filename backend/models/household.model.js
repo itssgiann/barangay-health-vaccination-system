@@ -1,44 +1,60 @@
 const db = require('../config/db');
 
-const Household = {
-    getAll: async () => {
-        const [rows] = await db.promise().query(
-            'SELECT * FROM households'
-        );
-        return rows;
-    },
+const getAll = (callback) => {
+    db.query('SELECT * FROM households', callback);
+};
 
-    getById: async (id) => {
-        const [rows] = await db.promise().query(
-            'SELECT * FROM households WHERE household_id = ?',
-            [id]
-        );
-        return rows[0];
-    },
+const getById = (id, callback) => {
+    db.query('SELECT * FROM households WHERE household_id = ?', [id], callback);
+};
 
-    create: async (data) => {
-        const sql = `
-            INSERT INTO households (zone_id, household_name, address)
-            VALUES (?, ?, ?)
-        `;
+const create = (data, callback) => {
+    const sql = `
+        INSERT INTO households
+        (zone_id, household_name, address)
+        VALUES (?, ?, ?)
+    `;
 
-        const [result] = await db.promise().query(sql, [
+    db.query(
+        sql,
+        [
             data.zone_id,
             data.household_name,
             data.address
-        ]);
-
-        return result.insertId;
-    },
-
-    delete: async (id) => {
-        const [result] = await db.promise().query(
-            'DELETE FROM households WHERE household_id = ?',
-            [id]
-        );
-
-        return result.affectedRows;
-    }
+        ],
+        callback
+    );
 };
 
-module.exports = Household;
+const update = (id, data, callback) => {
+    const sql = `
+        UPDATE households
+        SET zone_id = ?,
+            household_name = ?,
+            address = ?
+        WHERE household_id = ?
+    `;
+
+    db.query(
+        sql,
+        [
+            data.zone_id,
+            data.household_name,
+            data.address,
+            id
+        ],
+        callback
+    );
+};
+
+const remove = (id, callback) => {
+    db.query('DELETE FROM households WHERE household_id = ?', [id], callback);
+};
+
+module.exports = {
+    getAll,
+    getById,
+    create,
+    update,
+    delete: remove
+};

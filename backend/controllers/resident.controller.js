@@ -1,139 +1,222 @@
-
 const Resident = require('../models/resident.model');
 
-function validId(value) {
-    return /^[1-9]\d*$/.test(String(value));
-}
+const getAll = (req, res) => {
+    Resident.getAll((err, results) => {
+        if (err) {
+            console.log('RESIDENT ERROR:', err);
 
-function validateResident(data) {
-    const required = [
-        'household_id', 'zone_id', 'first_name',
-        'last_name', 'birthdate', 'gender'
-    ];
-
-    for (const field of required) {
-        if (data[field] == null || String(data[field]).trim() === '') {
-            return `Missing ${field}`;
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
         }
-    }
 
-    if (!validId(data.household_id) || !validId(data.zone_id)) {
-        return 'Invalid household_id or zone_id';
-    }
+        res.status(200).json(results);
+    });
+};
 
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data.birthdate))) {
-        return 'birthdate must use YYYY-MM-DD';
-    }
+const getById = (req, res) => {
+    Resident.getById(req.params.id, (err, results) => {
+        if (err) {
+            console.log('RESIDENT ERROR:', err);
 
-    if (String(data.gender).length > 10) {
-        return 'gender is too long';
-    }
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
 
-    return null;
-}
+        if (results.length === 0) {
+            return res.status(404).json({
+                message: 'Resident not found'
+            });
+        }
 
-function sendError(res, err) {
-    if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        res.status(200).json(results[0]);
+    });
+};
+
+const create = (req, res) => {
+    const {
+        household_id,
+        zone_id,
+        first_name,
+        middle_name,
+        last_name,
+        birthdate,
+        gender,
+        address,
+        contact_number
+    } = req.body;
+
+    if (
+        !household_id ||
+        !zone_id ||
+        !first_name ||
+        !last_name ||
+        !birthdate ||
+        !gender
+    ) {
         return res.status(400).json({
-            message: 'Invalid household or zone reference'
+            message: 'household_id, zone_id, first_name, last_name, birthdate and gender are required'
         });
     }
 
-    if (err.code === 'ER_ROW_IS_REFERENCED_2') {
-        return res.status(409).json({
-            message: 'Resident has related records'
+    Resident.create(
+        {
+            household_id,
+            zone_id,
+            first_name,
+            middle_name,
+            last_name,
+            birthdate,
+            gender,
+            address,
+            contact_number
+        },
+        (err, result) => {
+            if (err) {
+                console.log('RESIDENT ERROR:', err);
+
+                if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+                    return res.status(400).json({
+                        message: 'Invalid reference: a related record does not exist'
+                    });
+                }
+
+                if (
+                    err.code === 'ER_DATA_TOO_LONG' ||
+                    err.code === 'ER_TRUNCATED_WRONG_VALUE'
+                ) {
+                    return res.status(400).json({
+                        message: 'Invalid data: check the values you sent'
+                    });
+                }
+
+                return res.status(500).json({
+                    message: 'Database error',
+                    error: err.message
+                });
+            }
+
+            res.status(201).json({
+                message: 'Resident added',
+                resident_id: result.insertId
+            });
+        }
+    );
+};
+
+const update = (req, res) => {
+    const {
+        household_id,
+        zone_id,
+        first_name,
+        middle_name,
+        last_name,
+        birthdate,
+        gender,
+        address,
+        contact_number
+    } = req.body;
+
+    if (
+        !household_id ||
+        !zone_id ||
+        !first_name ||
+        !last_name ||
+        !birthdate ||
+        !gender
+    ) {
+        return res.status(400).json({
+            message: 'household_id, zone_id, first_name, last_name, birthdate and gender are required'
         });
     }
 
-    return res.status(500).json({ message: 'Server error' });
-}
+    Resident.update(
+        req.params.id,
+        {
+            household_id,
+            zone_id,
+            first_name,
+            middle_name,
+            last_name,
+            birthdate,
+            gender,
+            address,
+            contact_number
+        },
+        (err, result) => {
+            if (err) {
+                console.log('RESIDENT ERROR:', err);
 
-exports.getAll = async (req, res) => {
-    try {
-        const residents = await Resident.getAll();
-        return res.status(200).json(residents);
-    } catch (err) {
-        return sendError(res, err);
-    }
+                if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+                    return res.status(400).json({
+                        message: 'Invalid reference: a related record does not exist'
+                    });
+                }
+
+                if (
+                    err.code === 'ER_DATA_TOO_LONG' ||
+                    err.code === 'ER_TRUNCATED_WRONG_VALUE'
+                ) {
+                    return res.status(400).json({
+                        message: 'Invalid data: check the values you sent'
+                    });
+                }
+
+                return res.status(500).json({
+                    message: 'Database error',
+                    error: err.message
+                });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message: 'Resident not found'
+                });
+            }
+
+            res.status(200).json({
+                message: 'Resident updated'
+            });
+        }
+    );
 };
 
-exports.getById = async (req, res) => {
-    if (!validId(req.params.id)) {
-        return res.status(400).json({ message: 'Invalid resident ID' });
-    }
+const remove = (req, res) => {
+    Resident.delete(req.params.id, (err, result) => {
+        if (err) {
+            console.log('RESIDENT ERROR:', err);
 
-    try {
-        const resident = await Resident.getById(req.params.id);
+            if (err.code === 'ER_ROW_IS_REFERENCED_2') {
+                return res.status(409).json({
+                    message: 'Cannot delete: other records depend on this one'
+                });
+            }
 
-        if (!resident) {
-            return res.status(404).json({ message: 'Resident not found' });
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
         }
 
-        return res.status(200).json(resident);
-    } catch (err) {
-        return sendError(res, err);
-    }
-};
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'Resident not found'
+            });
+        }
 
-exports.create = async (req, res) => {
-    const data = req.body || {};
-    const error = validateResident(data);
-
-    if (error) {
-        return res.status(400).json({ message: error });
-    }
-
-    try {
-        const id = await Resident.create(data);
-        return res.status(201).json({
-            message: 'Resident added',
-            resident_id: id
+        res.status(200).json({
+            message: 'Resident deleted'
         });
-    } catch (err) {
-        return sendError(res, err);
-    }
+    });
 };
 
-exports.update = async (req, res) => {
-    if (!validId(req.params.id)) {
-        return res.status(400).json({ message: 'Invalid resident ID' });
-    }
-
-    const data = req.body || {};
-    const error = validateResident(data);
-
-    if (error) {
-        return res.status(400).json({ message: error });
-    }
-
-    try {
-        const updated = await Resident.update(req.params.id, data);
-
-        if (!updated) {
-            return res.status(404).json({ message: 'Resident not found' });
-        }
-
-        return res.status(200).json({ message: 'Resident updated' });
-    } catch (err) {
-        return sendError(res, err);
-    }
+module.exports = {
+    getAll,
+    getById,
+    create,
+    update,
+    delete: remove
 };
-
-exports.delete = async (req, res) => {
-    if (!validId(req.params.id)) {
-        return res.status(400).json({ message: 'Invalid resident ID' });
-    }
-
-    try {
-        const deleted = await Resident.delete(req.params.id);
-
-        if (!deleted) {
-            return res.status(404).json({ message: 'Resident not found' });
-        }
-
-        return res.status(200).json({ message: 'Resident deleted' });
-    } catch (err) {
-        return sendError(res, err);
-    }
-};
-
