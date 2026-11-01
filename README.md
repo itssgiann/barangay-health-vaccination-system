@@ -12,8 +12,8 @@ A barangay health center system for tracking resident vaccinations and vaccine s
 ## Ownership Matrix
 | Member | GitHub username | Tables | Endpoints / screens | Join report(s) and join type | Feature role |
 |---|---|---|---|---|---|
-| Almarez, Gian | itssgiann | Users, Medical_Staff, Barangay_Zones | /api/zones, /api/staff, /api/users, /api/staff/with-zones | Staff + Zones, INNER JOIN | Core |
-| Abad, Christ John | KingHunter752189 | Residents, Vaccines | | | Master data |
+| Almarez, Gian | itssgiann | Users, Medical_Staff, Barangay_Zones | | | Core |
+| Abad, Christ John | KingHunter752189 | Residents, Vaccines | /api/residents, /api/vaccines, /api/residents/report | Residents + Vaccination Records, LEFT JOIN ([PR #69](https://github.com/itssgiann/barangay-health-vaccination-system/pull/69)) | Master data |
 | Alde, Ian Laurence | ianalde9-oss | Vaccination_Records, Appointments, Consultations | | | Transactions |
 | Aba, Joseph | abajoseph | Vaccine_Batches, Immunization_Milestones, Inventory_Stock_Movements | | | Unique feature (rules) |
 | Arayan, Michael Vince | Mivennz | Health_Equipment, Temperature_Logs, Alerts | | | Unique feature (workflow, alerts) + Audit |
