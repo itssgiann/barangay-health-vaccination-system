@@ -213,6 +213,6 @@ CREATE TABLE adverse_events (
     reported_at DATETIME,
     FOREIGN KEY (record_id)   REFERENCES vaccination_records(record_id),
     FOREIGN KEY (reported_by) REFERENCES medical_staff(staff_id)
-); 
+);
 
 SET FOREIGN_KEY_CHECKS = 1;
