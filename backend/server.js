@@ -33,6 +33,13 @@ app.use(express.static('../frontend'));
  
 // Joseph
 
+const milestoneRoutes = require('./routes/immunizationMilestone.routes');
+ const batchRoutes = require('./routes/vaccineBatch.routes');
+ const stockRoutes = require('./routes/stockMovement.routes');
+ app.use('/api/milestones', milestoneRoutes);
+ app.use('/api/batches', batchRoutes);
+ app.use('/api/stock-movements', stockRoutes);
+
 
 // Vince
 
