@@ -55,6 +55,12 @@ app.use('/api/temperature-logs', temperatureRoutes);
 app.use('/api/alerts', alertRoutes);
 
 
+// Unique feature
+
+const batchExpiryRoutes = require('./routes/batchExpiry.routes');
+app.use('/api/expiry', batchExpiryRoutes);
+
+
 // Angelique
 
 const householdRoutes = require('./routes/household.routes');
