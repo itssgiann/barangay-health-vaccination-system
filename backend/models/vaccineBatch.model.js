@@ -63,6 +63,24 @@ const update = (id, data, callback) => {
     );
 };
 
+const getWithVaccines = (callback) => {
+    const sql = `
+        SELECT
+            v.vaccine_id,
+            v.vaccine_name,
+            vb.batch_id,
+            vb.batch_number,
+            vb.quantity_remaining,
+            vb.expiry_date
+        FROM vaccine_batches vb
+        RIGHT JOIN vaccines v
+            ON vb.vaccine_id = v.vaccine_id
+        ORDER BY v.vaccine_id, vb.batch_id
+    `;
+
+    db.query(sql, callback);
+};
+
 const remove = (id, callback) => {
     db.query('DELETE FROM vaccine_batches WHERE batch_id = ?', [id], callback);
 };
@@ -70,6 +88,7 @@ const remove = (id, callback) => {
 module.exports = {
     getAll,
     getById,
+    getWithVaccines,
     create,
     update,
     delete: remove
