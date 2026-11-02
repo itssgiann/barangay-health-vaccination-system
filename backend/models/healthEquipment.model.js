@@ -60,6 +60,25 @@ const update = (id, data, callback) => {
     );
 };
 
+const getWithLogs = (callback) => {
+    const sql = `
+        SELECT
+            he.equipment_id,
+            he.equipment_name,
+            he.location,
+            tl.log_id,
+            tl.temperature_celsius,
+            tl.is_out_of_range,
+            tl.recorded_at
+        FROM health_equipment he
+        LEFT JOIN temperature_logs tl
+            ON he.equipment_id = tl.equipment_id
+        ORDER BY he.equipment_id, tl.recorded_at
+    `;
+
+    db.query(sql, callback);
+};
+
 const remove = (id, callback) => {
     db.query('DELETE FROM health_equipment WHERE equipment_id = ?', [id], callback);
 };
@@ -67,6 +86,7 @@ const remove = (id, callback) => {
 module.exports = {
     getAll,
     getById,
+    getWithLogs,
     create,
     update,
     delete: remove

@@ -15,6 +15,21 @@ const getAll = (req, res) => {
     });
 };
 
+const getWithLogs = (req, res) => {
+    HealthEquipment.getWithLogs((err, results) => {
+        if (err) {
+            console.log('EQUIPMENT ERROR:', err);
+
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
 const getById = (req, res) => {
     HealthEquipment.getById(req.params.id, (err, results) => {
         if (err) {
@@ -182,6 +197,7 @@ const remove = (req, res) => {
 module.exports = {
     getAll,
     getById,
+    getWithLogs,
     create,
     update,
     delete: remove
