@@ -1,160 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resident Vaccination Report</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f6f8;
-            color: #222;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            background: white;
-            padding: 24px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .description {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background: #20466c;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background: #f3f6f9;
-        }
-
-        #message {
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <title>Vaccination Report | Barangay Health</title>
+  <style>
+    :root {
+      --teal:#0f766e; --teal-dark:#115e59; --teal-soft:#eaf7f3;
+      --ink:#162638; --muted:#667789; --bg:#f5f8fa; --line:#e4eaee;
+      --white:#fff; --shadow:0 5px 22px rgba(20,38,56,.035);
+    }
+    * { box-sizing:border-box; }
+    html { -webkit-text-size-adjust:100%; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:var(--teal-dark); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    button, input, select { font:inherit; }
+    button { cursor:pointer; }
+    button:disabled { cursor:wait; opacity:.65; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:3px solid #8dd8ce; outline-offset:2px; }
+    .topbar { background:#fff; border-bottom:1px solid var(--line); }
+    .topbar-inner { max-width:1152px; margin:auto; padding:15px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { display:flex; align-items:center; gap:11px; text-decoration:none; color:var(--ink); }
+    .brand:hover { text-decoration:none; }
+    .brand-mark { width:40px; height:40px; flex:none; border-radius:12px; display:grid; place-items:center; background:var(--teal); color:#fff; font-size:22px; font-weight:700; }
+    .brand strong { display:block; font-size:14px; letter-spacing:-.02em; }
+    .brand small { display:block; font-size:11px; color:var(--muted); line-height:1.5; }
+    .topnav { display:flex; gap:9px; align-items:center; }
+    .navlink { padding:8px 12px; border-radius:10px; color:var(--muted); font-weight:600; font-size:13px; }
+    .navlink.active { background:var(--teal-soft); color:var(--teal-dark); }
+    .main { max-width:1152px; padding:28px 24px 70px; margin:0 auto; }
+    .breadcrumb { color:var(--muted); font-size:12px; margin-bottom:24px; }
+    .breadcrumb span { color:var(--ink); font-weight:600; }
+    .hero { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:27px; }
+    .eyebrow { display:block; font-size:11px; font-weight:800; letter-spacing:.15em; color:var(--teal); text-transform:uppercase; margin-bottom:5px; }
+    h1 { margin:0; font-size:clamp(25px,3.5vw,32px); line-height:1.2; letter-spacing:-.04em; }
+    .subtitle { color:var(--muted); margin:8px 0 0; font-size:14px; }
+    .button { border:1px solid var(--line); background:#fff; border-radius:10px; padding:10px 15px; font-weight:650; color:var(--ink); display:inline-flex; gap:8px; align-items:center; justify-content:center; white-space:nowrap; min-height:41px; }
+    .button.primary { background:var(--teal); border-color:var(--teal); color:#fff; }
+    .button.primary:hover { background:var(--teal-dark); }
+    .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:24px; }
+    .stat { background:#fff; border:1px solid var(--line); box-shadow:var(--shadow); border-radius:15px; padding:20px 21px; min-width:0; display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+    .stat-name { font-size:12px; color:var(--muted); display:block; margin-bottom:5px; }
+    .stat-number { font-size:29px; font-weight:750; letter-spacing:-.05em; line-height:1.2; }
+    .stat-icon { display:grid; place-items:center; flex:none; width:38px; height:38px; border-radius:11px; background:var(--teal-soft); color:var(--teal-dark); font-size:18px; }
+    .panel { background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; }
+    .panel-head { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:21px 24px 13px; }
+    h2 { font-size:17px; letter-spacing:-.025em; margin:0; }
+    .panel-head p { margin:2px 0 0; font-size:12px; color:var(--muted); }
+    .tools { display:grid; grid-template-columns:minmax(0,1fr) 195px; gap:12px; padding:0 24px 21px; }
+    .input-wrap { position:relative; }
+    .input-wrap:before { content:"⌕"; position:absolute; top:8px; left:14px; font-size:22px; line-height:1; color:#8797a4; pointer-events:none; }
+    .input-wrap input { width:100%; padding:11px 14px 11px 40px; }
+    input, select { min-height:43px; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); width:100%; padding:10px 12px; outline:none; }
+    input::placeholder { color:#8b99a7; }
+    .content { background:#fbfcfd; padding:22px 24px 23px; border-top:1px solid var(--line); }
+    .report-meta { font-size:12px; color:var(--muted); margin-bottom:16px; }
+    .cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+    .resident-card { background:#fff; border:1px solid var(--line); border-radius:13px; overflow:hidden; min-width:0; }
+    .person-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; padding:18px 18px 15px; }
+    .person-info { min-width:0; }
+    .person-name { font-size:15px; font-weight:750; letter-spacing:-.02em; overflow-wrap:anywhere; }
+    .person-id { font-size:12px; color:var(--muted); margin-top:2px; }
+    .badge { display:inline-flex; align-items:center; border-radius:999px; padding:4px 9px; font-size:11px; font-weight:750; white-space:nowrap; }
+    .badge.due { background:#fff2d8; color:#91620c; }
+    .badge.overdue { background:#fff0ee; color:#bb4035; }
+    .badge.completed { background:#eaf7f0; color:#25704e; }
+    .badge.no-record { background:#f0f3f6; color:#637080; }
+    .badge.other { background:#eaf2fb; color:#3b6299; }
+    .dose-list { margin:0 18px 18px; border-top:1px solid #edf0f2; }
+    .dose { padding:13px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; border-bottom:1px solid #edf0f2; }
+    .dose:last-child { border-bottom:0; padding-bottom:0; }
+    .dose-primary { min-width:0; }
+    .dose-title { font-size:12px; font-weight:750; }
+    .dose-sub { color:var(--muted); font-size:12px; margin-top:3px; }
+    .dose-right { text-align:right; flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
+    .empty-record { padding:15px 0 0; font-size:12px; color:var(--muted); }
+    .no-results { border:1px dashed #d8e2e8; background:#fff; border-radius:13px; text-align:center; padding:36px 16px; color:var(--muted); }
+    .no-results strong { display:block; color:var(--ink); margin-bottom:5px; font-size:15px; }
+    .panel-foot { border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:10px; padding:15px 24px; color:var(--muted); font-size:12px; }
+    .error-banner { color:#a83630; background:#fff1f0; border:1px solid #f3d3ce; padding:13px 16px; border-radius:10px; margin-bottom:15px; }
+    [hidden] { display:none !important; }
+    @media(max-width:700px) {
+      .topbar-inner { padding:13px 17px; }
+      .navlink { padding:8px 10px; }
+      .main { padding:23px 16px 40px; }
+      .breadcrumb { margin-bottom:19px; }
+      .hero { align-items:flex-start; flex-wrap:wrap; margin-bottom:21px; }
+      .hero .button { width:100%; }
+      .stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:17px; }
+      .stat { padding:16px; }
+      .stat:last-child { grid-column:1/-1; }
+      .stat-number { font-size:27px; }
+      .panel-head { padding:18px 16px 14px; }
+      .tools { padding:0 16px 16px; grid-template-columns:1fr; gap:10px; }
+      .content { padding:16px; }
+      .cards { grid-template-columns:1fr; gap:12px; }
+      .panel-foot { padding:13px 16px; align-items:flex-start; flex-wrap:wrap; }
+    }
+    @media(max-width:370px) { .brand small { display:none; } .navlink { font-size:12px; padding:6px 7px; } }
+  </style>
 </head>
 <body>
-    <main class="container">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./residents.html" aria-label="Go to Residents Management">
+        <span class="brand-mark" aria-hidden="true">+</span>
+        <span><strong>Barangay Health</strong><small>Management System</small></span>
+      </a>
+      <nav class="topnav" aria-label="Page navigation">
+        <a class="navlink" href="./residents.html">Residents</a>
+        <span class="navlink active" aria-current="page">Reports</span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="breadcrumb">Management / <span>Vaccination Report</span></div>
+    <div class="hero">
+      <div>
+        <span class="eyebrow">Community care</span>
         <h1>Resident Vaccination Report</h1>
+        <p class="subtitle">Track resident vaccination history, upcoming doses and follow-ups.</p>
+      </div>
+      <a class="button primary" href="./residents.html">← Back to Residents</a>
+    </div>
 
-        <p class="description">
-            Barangay Healthcare and Vaccination Management System
-            <br>
-            Residents and Vaccination Records (LEFT JOIN)
-        </p>
+    <section class="stats" aria-label="Report summary">
+      <div class="stat"><div><span class="stat-name">Total Residents</span><span id="statResidents" class="stat-number">—</span></div><span class="stat-icon" aria-hidden="true">♧</span></div>
+      <div class="stat"><div><span class="stat-name">Vaccination Records</span><span id="statRecords" class="stat-number">—</span></div><span class="stat-icon" aria-hidden="true">✚</span></div>
+      <div class="stat"><div><span class="stat-name">Need Follow-up</span><span id="statFollowup" class="stat-number">—</span></div><span class="stat-icon" aria-hidden="true">◷</span></div>
+    </section>
 
-        <p id="message">Loading records...</p>
+    <section class="panel" aria-labelledby="directoryTitle">
+      <div class="panel-head">
+        <div><h2 id="directoryTitle">Vaccination Overview</h2><p>Each resident is grouped with their vaccination history.</p></div>
+        <button id="refreshBtn" class="button" type="button">↻ Refresh</button>
+      </div>
+      <div class="tools">
+        <label class="input-wrap"><span style="position:absolute;left:-9999px">Search resident</span><input id="search" type="search" autocomplete="off" placeholder="Search by resident name or ID"></label>
+        <select id="statusFilter" aria-label="Filter by vaccination status">
+          <option value="all">All statuses</option>
+          <option value="due">Due</option>
+          <option value="overdue">Overdue</option>
+          <option value="completed">Completed</option>
+          <option value="no-record">No record</option>
+        </select>
+      </div>
+      <div class="content">
+        <div id="error" class="error-banner" role="alert" hidden></div>
+        <div id="resultText" class="report-meta" role="status" aria-live="polite">Loading vaccination records...</div>
+        <div id="cards" class="cards"></div>
+      </div>
+      <div class="panel-foot"><span id="footerText">Resident vaccination data</span><span>Barangay Health Center</span></div>
+    </section>
+  </main>
 
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Resident ID</th>
-                        <th>Resident Name</th>
-                        <th>Record ID</th>
-                        <th>Date Administered</th>
-                        <th>Next Due Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="reportBody"></tbody>
-            </table>
-        </div>
-    </main>
+  <script>
+    'use strict';
+    // This report uses the existing backend endpoint. LEFT JOIN stays in the SQL Model,
+    // not in the public-facing page title.
+    const API_URL = '/api/residents/report';
+    const cards = document.getElementById('cards');
+    const resultText = document.getElementById('resultText');
+    const errorBox = document.getElementById('error');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const search = document.getElementById('search');
+    const statusFilter = document.getElementById('statusFilter');
+    let groupedResidents = [];
 
-    <script>
-        function formatDate(value) {
-            if (!value) return '-';
+    function dateLabel(value) {
+      if (!value) return 'Not scheduled';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return 'Not scheduled';
+      return new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC'
+      }).format(date);
+    }
 
-            return new Intl.DateTimeFormat('en-GB', {
-                timeZone: 'Asia/Manila',
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            }).format(new Date(value));
+    function statusClass(value) {
+      const s = String(value || '').trim().toLowerCase();
+      if (s === 'due') return 'due';
+      if (s === 'overdue') return 'overdue';
+      if (s === 'completed') return 'completed';
+      if (!s || s === 'no record') return 'no-record';
+      return 'other';
+    }
+
+    function make(tag, className, content) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (content !== undefined && content !== null) node.textContent = String(content);
+      return node;
+    }
+
+    function pill(value) {
+      const label = value || 'No record';
+      return make('span', 'badge ' + statusClass(label), label);
+    }
+
+    function groupByResident(rows) {
+      const residents = new Map();
+      rows.forEach(row => {
+        const key = String(row.resident_id);
+        if (!residents.has(key)) {
+          residents.set(key, { id: row.resident_id, name: row.resident_name || 'Unnamed Resident', records: [] });
         }
-
-        async function loadReport() {
-            const message = document.getElementById('message');
-            const tableBody = document.getElementById('reportBody');
-
-            try {
-                const response = await fetch('/api/residents/report');
-
-                if (!response.ok) {
-                    throw new Error('Unable to load report');
-                }
-
-                const records = await response.json();
-
-                if (!Array.isArray(records)) {
-                    throw new Error('Invalid report data');
-                }
-
-                tableBody.replaceChildren();
-
-                records.forEach(record => {
-                    const row = document.createElement('tr');
-
-                    const values = [
-                        record.resident_id,
-                        record.resident_name,
-                        record.record_id ?? '-',
-                        formatDate(record.date_administered),
-                        formatDate(record.next_due_date),
-                        record.next_dose_status ?? 'No record'
-                    ];
-
-                    values.forEach(value => {
-                        const cell = document.createElement('td');
-                        cell.textContent = value;
-                        row.appendChild(cell);
-                    });
-
-                    tableBody.appendChild(row);
-                });
-
-                message.textContent = records.length +
-                    ' report row(s) found.';
-
-            } catch (error) {
-                message.textContent = 'Error loading report.';
-                console.error(error);
-            }
+        if (row.record_id !== null && row.record_id !== undefined) {
+          residents.get(key).records.push(row);
         }
+      });
+      return [...residents.values()].sort((a, b) => Number(a.id) - Number(b.id));
+    }
 
-        loadReport();
-    </script>
+    function summaryStatus(person) {
+      if (!person.records.length) return 'No record';
+      const statuses = person.records.map(record => statusClass(record.next_dose_status));
+      if (statuses.includes('overdue')) return 'Overdue';
+      if (statuses.includes('due')) return 'Due';
+      if (statuses.includes('completed')) return 'Completed';
+      return person.records[0].next_dose_status || 'Recorded';
+    }
+
+    function residentCard(person) {
+      const article = make('article', 'resident-card');
+      const top = make('div', 'person-top');
+      const info = make('div', 'person-info');
+      info.append(make('div', 'person-name', person.name));
+      info.append(make('div', 'person-id', 'Resident #' + person.id + ' · ' + person.records.length + ' vaccination ' + (person.records.length === 1 ? 'record' : 'records')));
+      top.append(info, pill(summaryStatus(person)));
+      article.append(top);
+
+      const list = make('div', 'dose-list');
+      if (!person.records.length) {
+        list.append(make('div', 'empty-record', 'No vaccination record yet. This resident is still included in the report.'));
+      } else {
+        person.records.forEach((record, index) => {
+          const item = make('div', 'dose');
+          const left = make('div', 'dose-primary');
+          left.append(make('div', 'dose-title', 'Vaccination #' + (index + 1) + ' · Record ' + record.record_id));
+          left.append(make('div', 'dose-sub', 'Administered: ' + dateLabel(record.date_administered)));
+          const right = make('div', 'dose-right');
+          right.append(pill(record.next_dose_status || 'Not set'));
+          right.append(make('div', 'dose-sub', 'Next due: ' + dateLabel(record.next_due_date)));
+          item.append(left, right);
+          list.append(item);
+        });
+      }
+      article.append(list);
+      return article;
+    }
+
+    function render() {
+      const query = search.value.trim().toLowerCase();
+      const filter = statusFilter.value;
+      const results = groupedResidents.filter(person => {
+        const matchesText = String(person.id).includes(query) || person.name.toLowerCase().includes(query);
+        const matchesStatus = filter === 'all' || (filter === 'no-record'
+          ? person.records.length === 0
+          : person.records.some(record => statusClass(record.next_dose_status) === filter));
+        return matchesText && matchesStatus;
+      });
+      cards.replaceChildren();
+      if (!results.length) {
+        const empty = make('div', 'no-results');
+        empty.style.gridColumn = '1 / -1';
+        empty.append(make('strong', '', groupedResidents.length ? 'No matching residents' : 'No resident records available'));
+        empty.append(make('div', '', groupedResidents.length ? 'Try another search or status filter.' : 'Add residents to start tracking vaccination history.'));
+        cards.append(empty);
+      } else {
+        results.forEach(person => cards.append(residentCard(person)));
+      }
+      resultText.textContent = 'Showing ' + results.length + ' of ' + groupedResidents.length + ' resident(s)';
+      document.getElementById('footerText').textContent = results.length + ' resident(s) shown · Updated from database';
+    }
+
+    async function loadReport() {
+      refreshBtn.disabled = true;
+      resultText.textContent = 'Loading vaccination records...';
+      errorBox.hidden = true;
+      cards.replaceChildren();
+      try {
+        const response = await fetch(API_URL, { headers: { Accept: 'application/json' } });
+        if (!response.ok) throw new Error('Unable to load vaccination report (HTTP ' + response.status + ').');
+        const rows = await response.json();
+        if (!Array.isArray(rows)) throw new Error('The server returned an unexpected report format.');
+        groupedResidents = groupByResident(rows);
+        const totalRecords = groupedResidents.reduce((sum, person) => sum + person.records.length, 0);
+        const followups = groupedResidents.filter(person => person.records.some(record => ['due', 'overdue'].includes(statusClass(record.next_dose_status)))).length;
+        document.getElementById('statResidents').textContent = groupedResidents.length;
+        document.getElementById('statRecords').textContent = totalRecords;
+        document.getElementById('statFollowup').textContent = followups;
+        render();
+      } catch (error) {
+        groupedResidents = [];
+        document.getElementById('statResidents').textContent = '—';
+        document.getElementById('statRecords').textContent = '—';
+        document.getElementById('statFollowup').textContent = '—';
+        errorBox.textContent = error.message + ' Please check the backend and database connection, then refresh.';
+        errorBox.hidden = false;
+        resultText.textContent = 'Report unavailable';
+        document.getElementById('footerText').textContent = 'Connection error';
+        console.error('Vaccination report error:', error);
+      } finally {
+        refreshBtn.disabled = false;
+      }
+    }
+
+    search.addEventListener('input', render);
+    statusFilter.addEventListener('change', render);
+    refreshBtn.addEventListener('click', loadReport);
+    loadReport();
+  </script>
 </body>
 </html>
