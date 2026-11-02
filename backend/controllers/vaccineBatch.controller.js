@@ -15,6 +15,21 @@ const getAll = (req, res) => {
     });
 };
 
+const getWithVaccines = (req, res) => {
+    VaccineBatch.getWithVaccines((err, results) => {
+        if (err) {
+            console.log('BATCH ERROR:', err);
+
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
 const getById = (req, res) => {
     VaccineBatch.getById(req.params.id, (err, results) => {
         if (err) {
@@ -226,6 +241,7 @@ const remove = (req, res) => {
 module.exports = {
     getAll,
     getById,
+    getWithVaccines,
     create,
     update,
     delete: remove
