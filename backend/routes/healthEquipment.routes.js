@@ -3,6 +3,7 @@ const router = express.Router();
 const controller = require('../controllers/healthEquipment.controller');
 
 router.get('/', controller.getAll);
+router.get('/report', controller.getWithLogs);
 router.get('/:id', controller.getById);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

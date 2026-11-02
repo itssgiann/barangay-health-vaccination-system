@@ -179,10 +179,26 @@ const remove = (req, res) => {
     });
 };
 
+const getWithLogs = (req, res) => {
+    HealthEquipment.getWithLogs((err, results) => {
+        if (err) {
+            console.log('EQUIPMENT ERROR:', err);
+
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
 module.exports = {
     getAll,
     getById,
     create,
     update,
+    getWithLogs,
     delete: remove
 };
