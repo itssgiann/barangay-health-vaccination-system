@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/resident.controller');
 
+router.get('/with-records', controller.getWithRecords);
 router.get('/', controller.getAll);
 router.get('/report', controller.getVaccinationReport);
 router.get('/:id', controller.getById);
