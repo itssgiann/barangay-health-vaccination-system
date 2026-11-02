@@ -4,6 +4,22 @@ const getAll = (req, res) => {
     AdverseEvent.getAll((err, results) => {
         if (err) {
             console.log('ADVERSE EVENT ERROR:', err);
+
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
+const getWithResidents = (req, res) => {
+    AdverseEvent.getWithResidents((err, results) => {
+        if (err) {
+            console.log('ADVERSE EVENT ERROR:', err);
+
             return res.status(500).json({
                 message: 'Database error',
                 error: err.message
@@ -18,6 +34,7 @@ const getById = (req, res) => {
     AdverseEvent.getById(req.params.id, (err, results) => {
         if (err) {
             console.log('ADVERSE EVENT ERROR:', err);
+
             return res.status(500).json({
                 message: 'Database error',
                 error: err.message
@@ -163,6 +180,7 @@ const remove = (req, res) => {
     AdverseEvent.delete(req.params.id, (err, result) => {
         if (err) {
             console.log('ADVERSE EVENT ERROR:', err);
+
             return res.status(500).json({
                 message: 'Database error',
                 error: err.message
@@ -181,23 +199,11 @@ const remove = (req, res) => {
     });
 };
 
-const getAdverseEventsWithResidentDetails = (req, res) => {
-    AdverseEvent.getAdverseEventsWithResidentDetails((err, results) => {
-        if (err) {
-            return res.status(500).send({
-                message: "An error occurred while retrieving adverse event details."
-            });
-        }
-
-        res.status(200).json(results);
-    });
-};
-
 module.exports = {
     getAll,
     getById,
+    getWithResidents,
     create,
     update,
-    delete: remove,
-    getAdverseEventsWithResidentDetails
+    delete: remove
 };
