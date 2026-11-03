@@ -15,9 +15,9 @@ INSERT INTO medical_staff (staff_id, zone_id, first_name, last_name, staff_role,
 (3, 3, 'Thea', 'Bahreal', 'Nurse', 'ML-580432130', '09223334444', TRUE);
 
 INSERT INTO users (user_id, staff_id, username, password_hash, role, is_active, created_at) VALUES
-(1, 1, 'Ssundee_12', 'PLACEHOLDER_HASH_1', 'Doctor', TRUE, '2026-10-01 08:00:00'),
-(2, 2, 'Cra_iner8', 'PLACEHOLDER_HASH_2', 'Nurse', TRUE, '2026-10-01 08:30:00'),
-(3, 3, 'Thea<3', 'PLACEHOLDER_HASH_3', 'Nurse', TRUE, '2026-10-01 09:00:00');
+(1, 1, 'Ssundee_12', '$2b$10$yb4.ak5qlo9GGiEfvukn7uoqWsN94GHDVbNgefmklfqkrytmkaybu', 'Doctor', TRUE, '2026-10-01 08:00:00'),
+(2, 2, 'Cra_iner8', '$2b$10$yb4.ak5qlo9GGiEfvukn7uoqWsN94GHDVbNgefmklfqkrytmkaybu', 'Nurse', TRUE, '2026-10-01 08:30:00'),
+(3, 3, 'Thea<3', '$2b$10$yb4.ak5qlo9GGiEfvukn7uoqWsN94GHDVbNgefmklfqkrytmkaybu', 'Nurse', TRUE, '2026-10-01 09:00:00');
 
 -- == ANGELIQUE ==
 

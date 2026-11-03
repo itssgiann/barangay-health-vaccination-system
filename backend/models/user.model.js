@@ -15,6 +15,14 @@ const getById = (id, callback) => {
     );
 };
 
+const findByUsername = (username, callback) => {
+    db.query(
+        'SELECT user_id, staff_id, username, password_hash, role, is_active, created_at FROM users WHERE username = ?',
+        [username],
+        callback
+    );
+};
+
 const create = (data, callback) => {
     const sql = `
         INSERT INTO users
@@ -72,6 +80,7 @@ const remove = (id, callback) => {
 module.exports = {
     getAll,
     getById,
+    findByUsername,
     create,
     update,
     delete: remove

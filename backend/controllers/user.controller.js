@@ -1,4 +1,6 @@
 const User = require('../models/user.model');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const getAll = (req, res) => {
     User.getAll((err, results) => {
@@ -33,6 +35,77 @@ const getById = (req, res) => {
         }
 
         res.status(200).json(results[0]);
+    });
+};
+
+const login = (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({
+            message: 'Username and password are required'
+        });
+    }
+
+    User.findByUsername(username, (err, results) => {
+        if (err) {
+            console.log('USER ERROR:', err);
+            return res.status(500).json({
+                message: 'Database error',
+                error: err.message
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(401).json({
+                message: 'Invalid username or password'
+            });
+        }
+
+        const user = results[0];
+
+        if (user.is_active === 0 || user.is_active === false) {
+            return res.status(401).json({
+                message: 'Account is deactivated'
+            });
+        }
+
+        bcrypt.compare(password, user.password_hash, (err, isMatch) => {
+            if (err) {
+                console.log('BCRYPT ERROR:', err);
+                return res.status(500).json({
+                    message: 'Internal server error'
+                });
+            }
+
+            if (!isMatch) {
+                return res.status(401).json({
+                    message: 'Invalid username or password'
+                });
+            }
+
+            const token = jwt.sign(
+                {
+                    user_id: user.user_id,
+                    username: user.username,
+                    role: user.role,
+                    staff_id: user.staff_id
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: '8h' }
+            );
+
+            res.status(200).json({
+                message: 'Login successful',
+                token,
+                user: {
+                    user_id: user.user_id,
+                    username: user.username,
+                    role: user.role,
+                    staff_id: user.staff_id
+                }
+            });
+        });
     });
 };
 
@@ -192,6 +265,7 @@ const remove = (req, res) => {
 module.exports = {
     getAll,
     getById,
+    login,
     create,
     update,
     delete: remove
