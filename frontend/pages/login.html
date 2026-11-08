@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="description" content="Sign in to Barangay Health Management System">
+  <title>Staff Login | Barangay Health</title>
+  <link rel="stylesheet" href="../css/health-ui.css">
+  <link rel="stylesheet" href="../css/auth-ui.css">
+</head>
+<body class="auth-body">
+  <div class="auth-page">
+    <header class="auth-header">
+      <div class="auth-header-inner">
+        <span class="auth-logo" aria-hidden="true">+</span>
+        <div class="auth-title">
+          <strong>Barangay Health</strong>
+          <small>Management System</small>
+        </div>
+      </div>
+    </header>
+
+    <main class="auth-main">
+      <section class="auth-card" aria-labelledby="loginTitle">
+        <div class="auth-card-heading">
+          <h1 id="loginTitle">Staff Login</h1>
+          <p>Enter your username and password.</p>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="auth-field">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text"
+              autocomplete="username" autocapitalize="none" spellcheck="false"
+              maxlength="50" placeholder="Enter your username" required autofocus>
+          </div>
+
+          <div class="auth-field">
+            <label for="password">Password</label>
+            <div class="auth-password-group">
+              <input id="password" name="password" type="password"
+                autocomplete="current-password" placeholder="Enter your password" required>
+              <button id="togglePassword" class="auth-show" type="button"
+                aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+          </div>
+
+          <p id="loginError" class="auth-alert" role="alert" hidden></p>
+          <button id="loginBtn" class="auth-submit" type="submit">
+            <span id="loginBtnText">Sign in</span>
+          </button>
+        </form>
+
+        <p class="auth-help">For account access, contact the health center administrator.</p>
+      </section>
+    </main>
+
+    <footer class="auth-footer">Barangay Health Center &middot; Staff Portal</footer>
+  </div>
+  <script src="../js/login.js" defer></script>
+</body>
+</html>

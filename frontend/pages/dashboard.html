@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0f766e"><title>Modules | Barangay Health</title><link rel="stylesheet" href="../css/health-ui.css"></head>
-<body><header class="top"><div class="crumb"><strong>Barangay Health</strong> / Team integration</div><div class="top-right">Development-only module hub</div></header>
-<main class="content" style="max-width:1140px">
-<p class="eyebrow">BARANGAY HEALTHCARE & VACCINATION MANAGEMENT SYSTEM</p><h1>Team module dashboard</h1>
-<p class="subtitle">Six individually owned screens sharing one visual design and one backend.</p>
-<div class="health-status" id="serverStatus" role="status">Checking API connection…</div>
-<section class="dashboard-grid" aria-label="Team modules">
-  <a class="card-link" href="Gian_Almarez.html"><strong>Users, Staff & Zones</strong><small>Gian Almarez · INNER JOIN report</small></a>
-  <a class="card-link" href="Christ_John_Abad.html"><strong>Residents & Vaccines</strong><small>Christ John Abad · LEFT JOIN + batch expiry</small></a>
-  <a class="card-link" href="Ian_Laurence_Alde.html"><strong>Vaccinations & Appointments</strong><small>Ian Laurence Alde · FULL OUTER JOIN simulation</small></a>
-  <a class="card-link" href="Joseph_Aba.html"><strong>Batches & Inventory</strong><small>Joseph Aba · RIGHT JOIN report</small></a>
-  <a class="card-link" href="Michael_Vince_Arayan.html"><strong>Equipment & Monitoring</strong><small>Michael Vince Arayan · LEFT JOIN report</small></a>
-  <a class="card-link" href="Angelique_Acodesin.html"><strong>Households & Adverse Events</strong><small>Angelique Acodesin · INNER JOIN report</small></a>
-</section>
-<section class="card" style="padding:22px"><h2>Connection checklist</h2><p class="subtitle">The frontend must be served by the same Express server as the API. Opening these files from Downloads or Messenger will not work.</p>
-<div class="mini-links"><a href="../pages/residents.html">Existing Residents page</a><a href="../pages/resident-vaccination-report.html">Existing Vaccination Report</a><a href="/api/zones" target="_blank" rel="noopener noreferrer">Test Zones API</a></div>
-<p class="muted" style="margin-top:18px;font-size:12px">Development/testing only. Gian's authenticated landing page will be integrated separately. Do not use identifiable patient data.</p></section>
-</main><script src="../js/dashboard.js"></script></body></html>
+<meta name="theme-color" content="#0f766e"><title>Team Dashboard | Barangay Health</title>
+<link rel="stylesheet" href="../css/health-ui.css"><link rel="stylesheet" href="../css/auth-ui.css"></head>
+<body>
+<header class="portal-header"><div class="portal-identity"><span class="auth-logo" aria-hidden="true">+</span><div><strong>Barangay Health</strong><small>Management System</small></div></div>
+<div class="portal-right"><div class="portal-user"><strong id="userName">Team member</strong><small id="userRole">Signed in</small></div><button id="logoutBtn" type="button" class="portal-logout">Log out</button></div></header>
+<main class="portal-main">
+  <p class="portal-label">BARANGAY HEALTH CENTER</p>
+  <h1>Barangay Health Dashboard</h1>
+  <p class="portal-lede">Choose a section below to view or update records.</p>
+  <div class="portal-status" id="serverStatus" role="status" aria-live="polite">Checking connection…</div>
+  <h2 class="portal-section-title">Records and Services</h2>
+  <nav class="portal-modules" aria-label="Team modules">
+    <a class="portal-module" href="Gian_Almarez.html"><span class="portal-module-icon" aria-hidden="true">01</span><strong>Staff and Areas</strong><small>Staff accounts, health workers and barangay zones</small></a>
+    <a class="portal-module" href="Christ_John_Abad.html"><span class="portal-module-icon" aria-hidden="true">02</span><strong>Residents and Vaccines</strong><small>Resident profiles, vaccines and batch expiry</small></a>
+    <a class="portal-module" href="Ian_Laurence_Alde.html"><span class="portal-module-icon" aria-hidden="true">03</span><strong>Appointments and Vaccinations</strong><small>Schedules, consultations and vaccine records</small></a>
+    <a class="portal-module" href="Joseph_Aba.html"><span class="portal-module-icon" aria-hidden="true">04</span><strong>Vaccine Inventory</strong><small>Available batches, stock movement and schedules</small></a>
+    <a class="portal-module" href="Michael_Vince_Arayan.html"><span class="portal-module-icon" aria-hidden="true">05</span><strong>Equipment and Monitoring</strong><small>Equipment, temperature logs and alerts</small></a>
+    <a class="portal-module" href="Angelique_Acodesin.html"><span class="portal-module-icon" aria-hidden="true">06</span><strong>Households and Reports</strong><small>Household details and reported events</small></a>
+  </nav>
+  <p class="portal-footnote">Testing version: Please use sample records only. Login works, but access restrictions for the backend are still being completed.</p>
+</main><script src="../js/dashboard.js" defer></script>
+</body></html>

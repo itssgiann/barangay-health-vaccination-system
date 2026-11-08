@@ -22,7 +22,7 @@ const isExpiry = () => state.tab === 'expiry';
 const TEXT_LIMITS = {
   zones: { zone_name: 50, description: 255 },
   staff: { first_name: 50, last_name: 50, staff_role: 20, license_number: 50, contact_number: 20 },
-  users: { username: 50, password_hash: 255, role: 20 },
+  users: { username: 50, password: 72, role: 20 },
   residents: { first_name: 50, middle_name: 50, last_name: 50, address: 255, contact_number: 20 },
   vaccines: { vaccine_name: 100, description: 255 },
   appointments: { status: 20, notes: 255 },
@@ -448,12 +448,11 @@ function crossFieldValidation(config, values, showOptional = false) {
   if (config.key === 'records' && has('date_administered') && has('next_due_date') && values.next_due_date < values.date_administered) {
     return fail('Next due date cannot be before the date administered.', ['date_administered', 'next_due_date']);
   }
-  if (config.key === 'users' && state.editing === null && has('password_hash') &&
-      !/^\$2[aby]\$\d{2}\$[.\/A-Za-z0-9]{53}$/.test(values.password_hash || '')) {
-    return fail('For this demo API, enter a valid bcrypt password hash, not a plain password. Gian should move hashing to the backend before final integration.', ['password_hash']);
+  if (config.key === 'users' && has('password') && (String(values.password).length < 8 || new TextEncoder().encode(String(values.password)).length > 72)) {
+    return fail('Password must be at least 8 characters and at most 72 UTF-8 bytes.', ['password']);
   }
-  if (showOptional && config.key === 'users' && state.editing === null && !has('password_hash')) {
-    return fail('A bcrypt password hash is required to create a user with the current backend.', ['password_hash']);
+  if (showOptional && config.key === 'users' && state.editing === null && !has('password')) {
+    return fail('A password is required to create a user.', ['password']);
   }
   return null;
 }
