@@ -5,6 +5,13 @@ const db = require('./config/db');
 const app = express();
 
 app.use(express.json());
+
+app.use((req, res, next) => {
+    if (req.body === undefined) {
+        req.body = {};
+    }
+    next();
+});
 app.use(express.static('../frontend'));
 
 // Gian
@@ -68,6 +75,10 @@ const adverseEventRoutes = require('./routes/adverseEvent.routes');
 app.use('/api/households', householdRoutes);
 app.use('/api/adverse-events', adverseEventRoutes);
 
+
+app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' });
+});
 
 const PORT = process.env.PORT || 5000;
 

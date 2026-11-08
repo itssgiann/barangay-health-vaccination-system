@@ -36,7 +36,7 @@ Must have these to start:
 - Postman (optional, for testing the API)
 
 ### 1. Get the code
-git clone <repository-url>
+git clone <https://github.com/itssgiann/barangay-health-vaccination-system>  
 cd barangay-health-vaccination-system
 
 ### 2. Start MySQL
@@ -51,9 +51,9 @@ cd barangay-health-vaccination-system
 Import `schema.sql` first and `seed.sql` second. The seed needs the tables from the schema. If you imported an older version before, delete the old database in phpMyAdmin first and import both files again.
 
 ### 4. Set up the environment file
-In the `backend` folder, copy `.env.example` to `.env`:
-cd backend
-copy .env.example .env
+The `.env.example` file is in the main folder of the project. Copy it into the `backend` folder and name the copy `.env`.  
+Run this from the main folder:  
+copy .env.example backend\.env
 
 The default values work with a fresh XAMPP install:
 PORT=5000
@@ -61,13 +61,14 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=barangay_vaccination_system
+JWT_SECRET=change_this_to_any_long_random_text  
 If your MySQL root user has a password, put it in `DB_PASSWORD`. Never commit your `.env` file.
 
 ### 5. Install the packages
-Still inside the `backend` folder:
+Open a terminal in the `backend` folder and run:
 
+cd backend
 npm install
-
 ### 6. Start the server
 npm start
 
