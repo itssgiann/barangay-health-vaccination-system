@@ -22,10 +22,9 @@ A barangay health center system for tracking resident vaccinations and vaccine s
 
 ## ER Diagram
 
-The full entity-relationship diagram for this system is available here:  
-[View ER Diagram on dbdiagram.io](https://dbdiagram.io/d/6ae8a39f027db74914c6d467)  
-The diagram covers all 16 tables across 6 members, including foreign key relationships, data types, and table ownership per section.
+![ER Diagram](docs/erdiagram.png)
 
+[Open the image file](docs/erdiagram.png) · [View on dbdiagram.io](https://dbdiagram.io/d/6ae8a39f027db74914c6d467)
 
 ## How to Run
 
