@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f766e"><title>Team Dashboard | Barangay Health</title>
+<link rel="stylesheet" href="../css/health-ui.css"><link rel="stylesheet" href="../css/auth-ui.css"></head>
+<body>
+<header class="portal-header"><div class="portal-identity"><span class="auth-logo" aria-hidden="true">+</span><div><strong>Barangay Health</strong><small>Management System</small></div></div>
+<div class="portal-right"><div class="portal-user"><strong id="userName">Team member</strong><small id="userRole">Signed in</small></div><button id="logoutBtn" type="button" class="portal-logout">Log out</button></div></header>
+<main class="portal-main">
+  <p class="portal-label">BARANGAY HEALTH CENTER</p>
+  <h1>Barangay Health Dashboard</h1>
+  <p class="portal-lede">Choose a section below to view or update records.</p>
+  <div class="portal-status" id="serverStatus" role="status" aria-live="polite">Checking connection…</div>
+  <h2 class="portal-section-title">Records and Services</h2>
+  <nav class="portal-modules" aria-label="Team modules">
+    <a class="portal-module" href="Gian_Almarez.html"><span class="portal-module-icon" aria-hidden="true">01</span><strong>Staff and Areas</strong><small>Staff accounts, health workers and barangay zones</small></a>
+    <a class="portal-module" href="Christ_John_Abad.html"><span class="portal-module-icon" aria-hidden="true">02</span><strong>Residents and Vaccines</strong><small>Resident profiles, vaccines and batch expiry</small></a>
+    <a class="portal-module" href="Ian_Laurence_Alde.html"><span class="portal-module-icon" aria-hidden="true">03</span><strong>Appointments and Vaccinations</strong><small>Schedules, consultations and vaccine records</small></a>
+    <a class="portal-module" href="Joseph_Aba.html"><span class="portal-module-icon" aria-hidden="true">04</span><strong>Vaccine Inventory</strong><small>Available batches, stock movement and schedules</small></a>
+    <a class="portal-module" href="Michael_Vince_Arayan.html"><span class="portal-module-icon" aria-hidden="true">05</span><strong>Equipment and Monitoring</strong><small>Equipment, temperature logs and alerts</small></a>
+    <a class="portal-module" href="Angelique_Acodesin.html"><span class="portal-module-icon" aria-hidden="true">06</span><strong>Households and Reports</strong><small>Household details and reported events</small></a>
+  </nav>
+  <p class="portal-footnote">Testing version: Please use sample records only. Login works, but access restrictions for the backend are still being completed.</p>
+</main><script src="../js/dashboard.js" defer></script>
+</body></html>
