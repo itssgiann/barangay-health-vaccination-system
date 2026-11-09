@@ -122,11 +122,11 @@ const PAGE = {
           "type": "text"
         },
         {
-          "key": "password",
-          "label": "Password",
+          "key": "password_hash",
+          "label": "Password Hash (bcrypt)",
           "required": false,
           "type": "password",
-          "help": "Required for a new account (at least 8 characters). Leave blank on Edit to keep the current password.",
+          "help": "New account: a bcrypt hash is required (not a plain password). Leave blank on Edit to keep the current hash. Coordinate password setup with Gian.",
           "requiredOnCreate": true
         },
         {
@@ -148,7 +148,7 @@ const PAGE = {
         "role",
         "is_active"
       ],
-      "notes": "Passwords are hashed by the server before they are saved.",
+      "notes": "DEMO ONLY. Current backend accepts bcrypt hashes on create and does not yet enforce auth globally. Gian should implement server-side password hashing and protected routes before real use.",
       "summary": "Users"
     }
   ],
