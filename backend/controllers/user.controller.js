@@ -19,7 +19,7 @@ const sendDatabaseError = (res, err) => {
 const bodyOf = req => req.body && typeof req.body === 'object' && !Array.isArray(req.body) ? req.body : {};
 const validPassword = value => typeof value === 'string' && value.length >= 8 && Buffer.byteLength(value, 'utf8') <= 72;
 const isValidUsername = name => typeof name === 'string' && name.trim().length >= 3 && name.trim().length <= 50;
-const isValidRole = role => typeof role === 'string' && role.trim().length > 0 && role.trim().length <= 20;
+const isValidRole = role => typeof role === 'string' && ['Admin', 'Doctor', 'Nurse'].includes(role.trim());
 const isValidStaffId = id => Number.isSafeInteger(Number(id)) && Number(id) > 0;
 const validActive = value => value === undefined || value === null || value === true || value === false || value === 0 || value === 1;
 
