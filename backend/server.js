@@ -12,6 +12,20 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+// GLOBAL API AUTH
+const verifyToken = require('./middleware/auth');
+
+app.use('/api', (req, res, next) => {
+    const isLogin =
+        req.method === 'POST' &&
+        req.originalUrl.split('?')[0] === '/api/users/login';
+
+    if (isLogin) return next();
+
+    return verifyToken(req, res, next);
+});
+
 app.use(express.static('../frontend'));
 
 // Gian
