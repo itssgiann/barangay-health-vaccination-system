@@ -1,4 +1,4 @@
-/* Simple login page; uses the same teal/white language as the member screens. */
+
 :root { --auth-teal:#0f766e; --auth-text:#172c38; --auth-muted:#6c7a85; --auth-line:#dfe7eb; }
 .auth-body { margin:0; background:#f6f8fa; color:var(--auth-text); font:14px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif; }
 .auth-page { min-height:100svh; display:flex; flex-direction:column; }
@@ -31,7 +31,7 @@
 .auth-body button:focus-visible, .auth-body a:focus-visible { outline:3px solid #74c7b5; outline-offset:2px; }
 @media (max-width:540px) { .auth-header-inner { padding:13px 18px; } .auth-main { align-items:flex-start; padding:40px 15px 24px; } .auth-card { padding:30px 23px 27px; } .auth-card h1 { font-size:26px; } }
 
-/* Simple dashboard: keep layout, links, logout and session features. */
+
 .portal-header{background:#fff;border-bottom:1px solid #e3ece9;min-height:68px;padding:12px clamp(18px,4vw,62px);display:flex;align-items:center;justify-content:space-between;gap:20px}
 .portal-identity{display:flex;gap:11px;align-items:center}.portal-identity .auth-logo{height:35px;width:35px;font-size:23px}.portal-identity strong{display:block;color:#163a39;font-size:14px}.portal-identity small{display:block;color:#859392;font-size:11px}
 .portal-right{display:flex;align-items:center;gap:12px}.portal-user{display:flex;flex-direction:column;align-items:flex-end;gap:2px}.portal-user strong{font-size:12px;color:#294c48}.portal-user small{font-size:10px;color:#80928e}
@@ -53,7 +53,7 @@
 @media(max-width:900px){.portal-modules{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:530px){.portal-header{padding:12px 15px}.portal-main{padding:29px 15px 60px}.portal-modules{grid-template-columns:1fr}.portal-module{min-height:auto}.portal-right{gap:7px}.portal-user{display:none}}
 
-/* Small usability refinements without changing the simple V4 layout. */
+
 .portal-module{position:relative;transition:border-color .15s ease,box-shadow .15s ease}
 .portal-module:hover,.portal-module:focus-visible{border-color:#93cabc;box-shadow:0 3px 10px rgba(22,66,61,.045)}
 .portal-module:focus-visible{outline:2px solid #0f766e;outline-offset:3px}
@@ -62,7 +62,7 @@
 .portal-footnote{max-width:790px;color:#70807e}
 @media(max-width:530px){.portal-module{padding:17px 18px}.portal-module-icon{margin-bottom:11px}}
 
-/* Keep the signed-in staff name visible even on phones. */
+
 @media(max-width:530px){
   .portal-user{display:flex;max-width:110px;min-width:0}
   .portal-user strong{font-size:11px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

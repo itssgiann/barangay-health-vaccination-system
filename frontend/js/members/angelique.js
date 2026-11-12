@@ -1,4 +1,4 @@
-/* Angelique Acodesin — assigned tables, form fields, and JOIN endpoint. */
+
 const PAGE = {
   "person": "Angelique Acodesin",
   "role": "Community Reports • Households & Adverse Events",

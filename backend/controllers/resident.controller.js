@@ -15,7 +15,7 @@ const getAll = (req, res) => {
     });
 };
 
-// Resident vaccination report
+
 const getVaccinationReport = (req, res) => {
     Resident.getVaccinationReport((err, results) => {
         if (err) {

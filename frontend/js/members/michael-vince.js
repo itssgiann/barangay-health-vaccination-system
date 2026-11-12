@@ -1,4 +1,4 @@
-/* Michael Vince Arayan — assigned tables, form fields, and JOIN endpoint. */
+
 const PAGE = {
   "person": "Michael Vince Arayan",
   "role": "Monitoring • Equipment & Alerts",

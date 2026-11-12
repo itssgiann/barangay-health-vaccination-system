@@ -1,4 +1,4 @@
-/* Joseph Aba — assigned tables, form fields, and JOIN endpoint. */
+
 const PAGE = {
   "person": "Joseph Aba",
   "role": "Inventory • Batches & Stock",

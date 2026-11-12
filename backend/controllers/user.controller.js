@@ -1,5 +1,5 @@
-// Barangay Health - User accounts and login (Step 2 integration).
-// NOTE: API role enforcement is a separate Step 3. Until then, do not expose this server publicly.
+
+
 const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -39,7 +39,7 @@ const login = (req, res) => {
   if (!isValidUsername(username) || typeof password !== 'string' || !password) {
     return res.status(400).json({ message: 'Enter your username and password.' });
   }
-  // Never ship a hardcoded JWT secret or accept an empty development secret.
+
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
     console.error('Missing/weak JWT_SECRET. Set a random 32+ character secret in backend/.env.');
     return res.status(503).json({ message: 'Login is not configured. Ask your team integrator to set JWT_SECRET.' });
@@ -112,7 +112,7 @@ const update = (req, res) => {
   const save = password_hash => {
     const record = {
       staff_id: Number(staff_id), username: username.trim(), role: role.trim(),
-      // The existing model conditionally updates password_hash when it is provided.
+
       password_hash, is_active: is_active == null ? true : Boolean(is_active)
     };
     User.update(req.params.id, record, (err, result) => {

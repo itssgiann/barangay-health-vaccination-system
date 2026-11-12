@@ -1,6 +1,6 @@
--- Demo staff display names for the Barangay Health test database only.
--- Does NOT change usernames, passwords, roles, IDs, or other records.
--- This script is for an existing local test database; run only after a backup.
+
+
+
 USE barangay_vaccination_system;
 START TRANSACTION;
 UPDATE medical_staff SET first_name = 'Echie', last_name = 'Abad'
