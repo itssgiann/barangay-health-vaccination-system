@@ -31,13 +31,13 @@ const PAGE = {
         },
         {
           "key": "min_temp",
-          "label": "Minimum Safe Temperature (°C)",
+          "label": "Min Temp",
           "required": false,
           "type": "decimal"
         },
         {
           "key": "max_temp",
-          "label": "Maximum Safe Temperature (°C)",
+          "label": "Max Temp",
           "required": false,
           "type": "decimal"
         },
@@ -96,9 +96,15 @@ const PAGE = {
         },
         {
           "key": "temperature_celsius",
-          "label": "Recorded Temperature (°C)",
+          "label": "Temperature Celsius",
           "required": true,
           "type": "decimal"
+        },
+        {
+          "key": "is_out_of_range",
+          "label": "Is Out Of Range",
+          "required": true,
+          "type": "boolean"
         },
         {
           "key": "recorded_at",

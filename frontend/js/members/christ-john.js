@@ -113,19 +113,19 @@ const PAGE = {
         },
         {
           "key": "total_doses_required",
-          "label": "Required Doses per Resident",
+          "label": "Total Doses Required",
           "required": true,
           "type": "number"
         },
         {
           "key": "storage_temp_min",
-          "label": "Minimum Storage Temperature (°C)",
+          "label": "Storage Temp Min",
           "required": false,
           "type": "decimal"
         },
         {
           "key": "storage_temp_max",
-          "label": "Maximum Storage Temperature (°C)",
+          "label": "Storage Temp Max",
           "required": false,
           "type": "decimal"
         }
