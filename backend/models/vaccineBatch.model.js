@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-// Display the effective expiry status even if a calendar day has passed since the last check.
+
 const getAll = (callback) => {
     const sql = `
         SELECT vb.batch_id, vb.vaccine_id, vb.equipment_id, vb.batch_number,
@@ -23,7 +23,7 @@ const getById = (id, callback) => {
     db.query('SELECT * FROM vaccine_batches WHERE batch_id = ?', [id], callback);
 };
 
-// A newly entered batch is immediately marked Expired when its date is in the past.
+
 const create = (data, callback) => {
     const sql = `
         INSERT INTO vaccine_batches
@@ -61,7 +61,7 @@ const update = (id, data, callback) => {
     ], callback);
 };
 
-// RIGHT JOIN preserves every registered vaccine, including vaccines with no batches yet.
+
 const getWithVaccines = (callback) => {
     const sql = `
         SELECT v.vaccine_id, v.vaccine_name, v.total_doses_required,

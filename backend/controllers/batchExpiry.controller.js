@@ -23,7 +23,7 @@ const getExpiring = (req, res) => {
 };
 
 const runCheck = (req, res) => {
-    // Use the authenticated staff ID; never trust a user-supplied staff ID.
+
     const staffId = Number(req.user?.staff_id);
     const days = parseDays(req.body?.days);
     if (!Number.isSafeInteger(staffId) || staffId < 1) {

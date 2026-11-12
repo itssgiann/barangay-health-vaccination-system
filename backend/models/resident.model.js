@@ -4,7 +4,7 @@ const getAll = (callback) => {
     db.query('SELECT * FROM residents', callback);
 };
 
-// Get resident vaccination report
+
 const getVaccinationReport = (callback) => {
     const sql = `
         SELECT
@@ -24,7 +24,7 @@ const getVaccinationReport = (callback) => {
 };
 
 const getWithRecords = (callback) => {
-    // Keep all residents, even when no vaccination has been recorded.
+
     const sql = `
         SELECT
             r.resident_id,

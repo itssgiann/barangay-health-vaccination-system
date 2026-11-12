@@ -3,7 +3,7 @@ USE barangay_vaccination_system;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
--- == GIAN ==
+
 
 CREATE TABLE barangay_zones (
     zone_id     INT         AUTO_INCREMENT PRIMARY KEY,
@@ -34,7 +34,7 @@ CREATE TABLE users (
     FOREIGN KEY (staff_id) REFERENCES medical_staff(staff_id)
 );
 
--- == ANGELIQUE ==
+
 
 CREATE TABLE households (
     household_id   INT          AUTO_INCREMENT PRIMARY KEY,
@@ -44,7 +44,7 @@ CREATE TABLE households (
     FOREIGN KEY (zone_id) REFERENCES barangay_zones(zone_id)
 );
 
--- == CHRIST JOHN ==
+
 
 CREATE TABLE residents (
     resident_id    INT         AUTO_INCREMENT PRIMARY KEY,
@@ -71,7 +71,7 @@ CREATE TABLE vaccines (
     storage_temp_max     DECIMAL(4,1)
 );
 
--- == VINCE ==
+
 
 CREATE TABLE health_equipment (
     equipment_id          INT          AUTO_INCREMENT PRIMARY KEY,
@@ -84,7 +84,7 @@ CREATE TABLE health_equipment (
     last_maintenance_date DATE
 );
 
--- == JOSEPH ==
+
 
 CREATE TABLE immunization_milestones (
     milestone_id         INT          AUTO_INCREMENT PRIMARY KEY,
@@ -111,7 +111,7 @@ CREATE TABLE vaccine_batches (
     FOREIGN KEY (equipment_id) REFERENCES health_equipment(equipment_id)
 );
 
--- == IAN ==
+
 
 CREATE TABLE appointments (
     appointment_id INT          AUTO_INCREMENT PRIMARY KEY,
@@ -160,7 +160,7 @@ CREATE TABLE vaccination_records (
     FOREIGN KEY (milestone_id) REFERENCES immunization_milestones(milestone_id)
 );
 
--- == JOSEPH ==
+
 
 CREATE TABLE inventory_stock_movements (
     movement_id   INT          AUTO_INCREMENT PRIMARY KEY,
@@ -174,7 +174,7 @@ CREATE TABLE inventory_stock_movements (
     FOREIGN KEY (staff_id) REFERENCES medical_staff(staff_id)
 );
 
--- == VINCE ==
+
 
 CREATE TABLE temperature_logs (
     log_id              INT          AUTO_INCREMENT PRIMARY KEY,
@@ -200,7 +200,7 @@ CREATE TABLE alerts (
     FOREIGN KEY (assigned_to) REFERENCES medical_staff(staff_id)
 );
 
--- == ANGELIQUE ==
+
 
 CREATE TABLE adverse_events (
     event_id    INT          AUTO_INCREMENT PRIMARY KEY,

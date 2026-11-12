@@ -1,4 +1,4 @@
-/* Gian Almarez — assigned tables, form fields, and JOIN endpoint. */
+
 const PAGE = {
   "person": "Gian Almarez",
   "role": "Core • Users, Staff & Zones",

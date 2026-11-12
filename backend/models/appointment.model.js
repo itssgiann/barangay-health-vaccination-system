@@ -61,8 +61,8 @@ const update = (id, data, callback) => {
 };
 
 const getWithRecords = (callback) => {
-    // FULL OUTER JOIN emulation: all appointments + vaccination records without a matching appointment.
-    // Matching is inferred from resident, vaccine and dose number; no direct appointment FK exists.
+
+
     const sql = `
         WITH dose_records AS (
             SELECT vr.record_id, vr.resident_id, vr.date_administered,

@@ -1,4 +1,4 @@
-/* Ian Laurence Alde — assigned tables, form fields, and JOIN endpoint. */
+
 const PAGE = {
   "person": "Ian Laurence Alde",
   "role": "Transactions • Vaccinations & Appointments",

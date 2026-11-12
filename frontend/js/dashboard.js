@@ -1,4 +1,4 @@
-/* Dashboard sign-in guard is user experience only. API access rules require Step 3 backend middleware. */
+
 (async () => {
   'use strict';
   const logout = () => {
@@ -21,7 +21,7 @@
     signedInUser = JSON.parse(sessionStorage.getItem('bhs_user') || '{}');
     document.getElementById('userName').textContent = signedInUser.username || 'Staff member';
     document.getElementById('userRole').textContent = signedInUser.role || 'Staff';
-  } catch (_) { /* Keep the default label. Never insert stored values as HTML. */ }
+  } catch (_) {  }
   const status = document.getElementById('serverStatus');
   try {
     const response = await fetch('/api/zones', {
@@ -37,8 +37,8 @@
     }
     await response.json();
     status.textContent = 'System connected. You can open a section below.';
-    // Use the staff record for a friendly display name; keep the username as the fallback.
-    // This lookup is optional, so an unavailable/restricted staff endpoint will not block the dashboard.
+
+
     if (Number.isSafeInteger(Number(signedInUser.staff_id)) && Number(signedInUser.staff_id) > 0) {
       try {
         const staffResponse = await fetch('/api/staff', {
@@ -52,7 +52,7 @@
             if (fullName) document.getElementById('userName').textContent = fullName;
           }
         }
-      } catch (_) { /* Name lookup is optional. The username remains available. */ }
+      } catch (_) {  }
     }
   } catch (_) {
     status.classList.add('error');

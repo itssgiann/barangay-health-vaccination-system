@@ -13,7 +13,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// GLOBAL API AUTH
+
 const verifyToken = require('./middleware/auth');
 
 app.use('/api', (req, res, next) => {
@@ -28,7 +28,7 @@ app.use('/api', (req, res, next) => {
 
 app.use(express.static('../frontend'));
 
-// Gian
+
 
 const zoneRoutes = require('./routes/barangayZone.routes');
 const staffRoutes = require('./routes/medicalStaff.routes');
@@ -38,7 +38,7 @@ app.use('/api/staff', staffRoutes);
 app.use('/api/users', userRoutes);
 
 
-// Christ John
+
 
 const residentRoutes = require('./routes/resident.routes');
 const vaccineRoutes = require('./routes/vaccine.routes');
@@ -46,7 +46,7 @@ app.use('/api/residents', residentRoutes);
 app.use('/api/vaccines', vaccineRoutes);
 
 
-// Ian
+
 
 const appointmentRoutes = require('./routes/appointment.routes');
 const consultationRoutes = require('./routes/consultation.routes');
@@ -56,7 +56,7 @@ app.use('/api/consultations', consultationRoutes);
 app.use('/api/vaccination-records', vaccinationRecordRoutes);
 
 
-// Joseph
+
 
 const milestoneRoutes = require('./routes/immunizationMilestone.routes');
 const batchRoutes = require('./routes/vaccineBatch.routes');
@@ -66,7 +66,7 @@ app.use('/api/batches', batchRoutes);
 app.use('/api/stock-movements', stockRoutes);
 
 
-// Vince
+
 
 const equipmentRoutes = require('./routes/healthEquipment.routes');
 const temperatureRoutes = require('./routes/temperatureLog.routes');
@@ -76,13 +76,13 @@ app.use('/api/temperature-logs', temperatureRoutes);
 app.use('/api/alerts', alertRoutes);
 
 
-// Unique feature
+
 
 const batchExpiryRoutes = require('./routes/batchExpiry.routes');
 app.use('/api/expiry', batchExpiryRoutes);
 
 
-// Angelique
+
 
 const householdRoutes = require('./routes/household.routes');
 const adverseEventRoutes = require('./routes/adverseEvent.routes');
@@ -100,8 +100,8 @@ app.listen(PORT, () => {
     console.log('Server running on port ' + PORT);
 });
 
-// Keep expired batch statuses current at startup and every six hours.
-// Expired alerts still require an authenticated staff member to assign them.
+
+
 const BatchExpiryModel = require('./models/batchExpiry.model');
 const refreshExpiredBatches = () => {
     BatchExpiryModel.markExpired((err) => {

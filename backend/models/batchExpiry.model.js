@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-// Show both upcoming batches AND those already expired, with remaining stock.
+
 const getExpiring = (days, callback) => {
     const sql = `
         SELECT vb.batch_id, vb.batch_number, v.vaccine_name,
@@ -27,7 +27,7 @@ const markExpired = (callback) => {
     `, callback);
 };
 
-// A near-expiry alert is no longer current after its batch is already expired.
+
 const resolveOutdatedNearExpiryAlerts = (callback) => {
     db.query(`
         UPDATE alerts a

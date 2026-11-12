@@ -1,7 +1,7 @@
-/* Barangay Health shared frontend engine | reviewed 2026-11-05
- * Presentation and client-side validation only. The backend remains the authority
- * for authorization, foreign keys, and medical/inventory business rules.
- */
+
+
+
+
 const $ = id => document.getElementById(id);
 const state = {
   tab: PAGE.entities[0].key,
@@ -34,7 +34,7 @@ const node = (tag, value, className) => {
 const entity = () => PAGE.entities.find(item => item.key === state.tab);
 const isReport = () => state.tab === 'report';
 const isExpiry = () => state.tab === 'expiry';
-// Mirror database VARCHAR limits so users can correct text before an API rejection.
+
 const TEXT_LIMITS = {
   zones: { zone_name: 50, description: 255 },
   staff: { first_name: 50, last_name: 50, staff_role: 20, license_number: 50, contact_number: 20 },
@@ -72,7 +72,7 @@ function formatCell(key, value) {
   if ((value === 0 || value === 1) && /^(is_active|is_out_of_range)$/.test(key)) return value === 1 ? 'Yes' : 'No';
   if (/date|_at$/.test(key) && /^\d{4}-\d\d-\d\d/.test(String(value))) {
     const text = String(value);
-    // MySQL DATE should be returned as a date string (backend mysql2 dateStrings:true).
+
     return text.slice(0, 10) + (text.length > 10 ? ' ' + text.slice(11, 16) : '');
   }
   return String(value);
@@ -106,11 +106,11 @@ async function api(url, options = {}) {
     throw new Error('Open this page from the running Express server (not directly from Downloads or Messenger).');
   }
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
-  // Login integration hook. This does NOT replace real backend authentication.
+
   try {
     const token = sessionStorage.getItem('bhs_auth_token');
     if (token) headers.Authorization = 'Bearer ' + token;
-  } catch (_) { /* Browser storage may be blocked. */ }
+  } catch (_) {  }
 
   let response;
   try { response = await fetch(url, { ...options, headers }); }
@@ -141,7 +141,7 @@ async function api(url, options = {}) {
     if (response.status >= 500 && /^(Database error|Internal server error)$/i.test(message)) message = fallbacks[500];
     if (response.status === 401) message = 'Please log in again to continue.';
     if (response.status === 403) message = 'Your account is not allowed to perform this action.';
-    // HTTP status stays available to debugging code without exposing codes as UI copy.
+
     const error = new Error(message);
     error.status = response.status;
     throw error;
@@ -168,7 +168,7 @@ function renderNav() {
 }
 function showTab(id) {
   if (!$('modal').hidden) closeForm();
-  // Immediately invalidate in-flight requests belonging to another tab.
+
   state.request++;
   state.tab = id;
   state.report = [];
@@ -387,7 +387,7 @@ async function addField(root, field, row) {
         }
         if (items.length === 0) group.append(node('small', 'No related records yet. Create the referenced record first.'));
       } catch (_) {
-        // Fallback remains available if only this lookup endpoint fails.
+
         input = node('input'); input.type = 'number'; input.step = '1'; input.min = '1';
         input.placeholder = `Enter existing ${field.key}`;
         group.append(node('small', 'Related-record list unavailable. Enter an existing ID manually.'));

@@ -14,7 +14,7 @@ const getById = (req, res) => TemperatureLog.getById(req.params.id, (err, rows) 
     return rows.length ? res.json(rows[0]) : res.status(404).json({ message: 'Temperature reading not found.' });
 });
 
-// The server derives out-of-range status from stored equipment temperature thresholds.
+
 const save = (req, res, editing) => {
     const body = req.body || {};
     const equipmentId = Number(body.equipment_id);

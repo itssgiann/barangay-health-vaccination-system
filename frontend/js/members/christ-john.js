@@ -1,4 +1,4 @@
-/* Christ John Abad — assigned tables, form fields, and JOIN endpoint. */
+
 const PAGE = {
   "person": "Christ John Abad",
   "role": "Master Data • Residents & Vaccines",
