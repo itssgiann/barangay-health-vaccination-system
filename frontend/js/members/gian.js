@@ -122,18 +122,19 @@ const PAGE = {
           "type": "text"
         },
         {
-          "key": "password_hash",
-          "label": "Password Hash (bcrypt)",
+          "key": "password",
+          "label": "Password",
           "required": false,
           "type": "password",
-          "help": "New account: a bcrypt hash is required (not a plain password). Leave blank on Edit to keep the current hash. Coordinate password setup with Gian.",
+          "help": "Enter a password (at least 8 characters; maximum 72 UTF-8 bytes). The server automatically hashes it securely. Leave this empty when editing to keep the current password.",
           "requiredOnCreate": true
         },
         {
           "key": "role",
-          "label": "Role",
+          "label": "Account Role",
           "required": true,
-          "type": "text"
+          "type": "select",
+          "options": ["Admin", "Doctor", "Nurse"]
         },
         {
           "key": "is_active",
@@ -148,7 +149,7 @@ const PAGE = {
         "role",
         "is_active"
       ],
-      "notes": "DEMO ONLY. Current backend accepts bcrypt hashes on create and does not yet enforce auth globally. Gian should implement server-side password hashing and protected routes before real use.",
+      "notes": "Only authorized Admin accounts can manage users. Passwords are submitted over the authenticated API and hashed by the backend.",
       "summary": "Users"
     }
   ],

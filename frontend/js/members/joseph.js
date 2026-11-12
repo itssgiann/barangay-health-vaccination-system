@@ -13,7 +13,7 @@ const PAGE = {
       "fields": [
         {
           "key": "vaccine_id",
-          "label": "Vaccine Id",
+          "label": "Vaccine",
           "required": true,
           "type": "lookup",
           "lookup": [
@@ -24,7 +24,7 @@ const PAGE = {
         },
         {
           "key": "equipment_id",
-          "label": "Equipment Id",
+          "label": "Storage Equipment",
           "required": true,
           "type": "lookup",
           "lookup": [
@@ -67,16 +67,18 @@ const PAGE = {
         },
         {
           "key": "status",
-          "label": "Status",
+          "label": "Batch Status",
           "required": false,
-          "type": "text",
-          "placeholder": "Available"
+          "type": "select",
+          "options": ["Available", "Quarantined", "Depleted", "Expired"],
+          "help": "Past-date batches are automatically marked Expired regardless of this selection."
         }
       ],
       "columns": [
         "batch_id",
         "batch_number",
-        "vaccine_id",
+        "vaccine_name",
+        "quantity_received",
         "quantity_remaining",
         "expiry_date",
         "status"
@@ -206,7 +208,7 @@ const PAGE = {
     }
   ],
   "report": {
-    "title": "Vaccine Batches + Vaccines",
+    "title": "Vaccine Inventory and Batch Coverage",
     "api": "/api/batches/with-vaccines",
     "join": "RIGHT JOIN"
   }

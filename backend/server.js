@@ -99,3 +99,15 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log('Server running on port ' + PORT);
 });
+
+// Keep expired batch statuses current at startup and every six hours.
+// Expired alerts still require an authenticated staff member to assign them.
+const BatchExpiryModel = require('./models/batchExpiry.model');
+const refreshExpiredBatches = () => {
+    BatchExpiryModel.markExpired((err) => {
+        if (err) console.error('Scheduled vaccine expiry status update failed:', err.message);
+    });
+};
+refreshExpiredBatches();
+const expiryTimer = setInterval(refreshExpiredBatches, 6 * 60 * 60 * 1000);
+expiryTimer.unref?.();
