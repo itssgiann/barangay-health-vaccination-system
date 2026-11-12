@@ -8,23 +8,7 @@ const state = {
   cache: {}, report: [], editing: null,
   busy: false, request: 0, modalRequest: 0, formLoading: false, serverFormError: null
 };
-const FIELD_LABELS = {
-  vaccine_id: 'Vaccine ID', batch_id: 'Batch ID', resident_id: 'Resident ID',
-  household_id: 'Household ID', zone_id: 'Zone ID', equipment_id: 'Equipment ID',
-  staff_id: 'Staff ID', assigned_to: 'Assigned Staff ID',
-  storage_temp_min: 'Minimum Storage Temperature (°C)',
-  storage_temp_max: 'Maximum Storage Temperature (°C)',
-  min_temp: 'Minimum Safe Temperature (°C)', max_temp: 'Maximum Safe Temperature (°C)',
-  temperature_celsius: 'Temperature (°C)',
-  is_out_of_range: 'Outside Safe Temperature Range?',
-  days_left: 'Days Until Expiry',
-  batch_status: 'Batch Availability',
-  match_status: 'Appointment-to-Vaccination Match',
-  date_administered: 'Date Vaccinated',
-  dose_number: 'Dose Number',
-  quantity_received: 'Doses Received', quantity_remaining: 'Doses Remaining'
-};
-const label = value => FIELD_LABELS[value] || String(value).replaceAll('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+const label = value => String(value).replaceAll('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
 const node = (tag, value, className) => {
   const element = document.createElement(tag);
   if (value !== undefined) element.textContent = String(value);
@@ -59,15 +43,6 @@ const todayLocal = () => {
 
 function formatCell(key, value) {
   if (value === null || value === undefined || value === '') return '—';
-  if (key === 'days_left' && Number.isFinite(Number(value))) {
-    const n = Number(value);
-    return n < 0 ? `Expired ${Math.abs(n)} day(s) ago` : n === 0 ? 'Expires today' : `${n} day(s) remaining`;
-  }
-  if (['temperature_celsius','storage_temp_min','storage_temp_max','min_temp','max_temp'].includes(key)) {
-    return `${value} °C`;
-  }
-  if (key === 'is_out_of_range') return (value === true || Number(value) === 1) ? 'Outside safe range' : 'Within safe range';
-  if (key === 'is_active') return (value === true || Number(value) === 1) ? 'Active' : 'Inactive';
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
   if ((value === 0 || value === 1) && /^(is_active|is_out_of_range)$/.test(key)) return value === 1 ? 'Yes' : 'No';
   if (/date|_at$/.test(key) && /^\d{4}-\d\d-\d\d/.test(String(value))) {
@@ -187,12 +162,13 @@ function showTab(id) {
   $('pageTitle').textContent = heading;
   $('pageSubtitle').textContent = selected
     ? `Browse, add, edit and manage ${selected.title.toLowerCase()} records.`
-    : isReport() ? `${PAGE.report.join} • Related records from the database` : 'Review upcoming and already-expired vaccine batches.';
+    : isReport() ? `${PAGE.report.join} • Cross-table SQL report` : 'Check vaccine batches nearing or past expiry.';
   $('sectionTitle').textContent = selected ? `${selected.title} Directory` : isReport() ? 'Joined Records' : 'Expiry Monitoring';
-  $('sectionDesc').textContent = selected ? 'View and manage records below.'    : isReport() ? 'See how the related records connect. Empty values mean a matching record does not exist.'
-       : 'Check expiry dates and remaining doses. Update statuses and alerts when needed.';
+  $('sectionDesc').textContent = selected ? 'View and manage records below.'
+    : isReport() ? 'Live results from your assigned SQL JOIN endpoint.'
+      : 'Read-only results. The optional expiry check can modify your database.';
   $('primaryAction').textContent = `+ Add ${selected?.title.replace(/s$/, '') || 'Record'}`;
-  $('apiText').textContent = selected ? 'Saved health center records' : isReport() ? 'Related database information' : 'Review current batch expiry dates';
+  $('apiText').textContent = selected?.api || (isReport() ? PAGE.report.api : '/api/expiry/expiring');
   $('special').hidden = !isExpiry();
   renderStats();
   if (isExpiry()) { expiryControls(); loadExpiry(); }
@@ -311,10 +287,14 @@ function expiryControls() {
   const check = node('button', 'Check upcoming', 'btn');
   check.type = 'button'; check.addEventListener('click', loadExpiry);
   filter.append(labelDays, check); wrap.append(filter);
+  wrap.append(node('div', 'Running POST /api/expiry/check updates vaccine batches and creates alerts. Use test data with team permission.', 'warning'));
   const control = node('div', undefined, 'inline-form');
-  const run = node('button', 'Update Expiry Status and Alerts', 'btn primary');
+  const staffLabel = node('label', 'Staff ID');
+  const staff = node('input'); staff.id = 'expiryStaff'; staff.type = 'number'; staff.min = '1'; staff.step = '1'; staff.placeholder = 'Existing staff ID';
+  staffLabel.append(staff);
+  const run = node('button', 'Run expiry check (POST)', 'btn primary');
   run.type = 'button'; run.addEventListener('click', runExpiry);
-  control.append(run); wrap.append(control);
+  control.append(staffLabel, run); wrap.append(control);
 }
 async function loadExpiry() {
   const days = Number($('days')?.value);
@@ -334,15 +314,17 @@ async function loadExpiry() {
 async function runExpiry() {
   if (state.busy) return;
   const days = Number($('days').value);
+  const staff_id = Number($('expiryStaff').value);
   if (!Number.isInteger(days) || days < 1) { notice('Enter a valid warning window first.', 'error'); return; }
-  if (!confirm('Update expired batch statuses and create any missing expiry alerts?')) return;
+  if (!Number.isInteger(staff_id) || staff_id < 1) { notice('Enter an existing staff ID first.', 'error'); return; }
+  if (!confirm('This action updates batch statuses and creates alerts in your database. Continue?')) return;
   state.busy = true;
-  const runButton = [...$('special').querySelectorAll('button')].find(b => b.textContent.includes('Update Expiry'));
+  const runButton = [...$('special').querySelectorAll('button')].find(b => b.textContent.includes('Run expiry'));
   if (runButton) runButton.disabled = true;
   try {
-    const result = await api('/api/expiry/check', { method: 'POST', body: JSON.stringify({ days }) });
+    const result = await api('/api/expiry/check', { method: 'POST', body: JSON.stringify({ staff_id, days }) });
     await loadExpiry();
-    notice(`Expiry statuses updated: ${result.batches_marked_expired ?? 0} batch(es). New upcoming-expiry alerts: ${result.near_expiry_alerts_created ?? 0}. New expired-batch alerts: ${result.expired_alerts_created ?? 0}.`);
+    notice(`Check complete. Expired batches: ${result.batches_marked_expired ?? 0}; near-expiry alerts: ${result.near_expiry_alerts_created ?? 0}; expired alerts: ${result.expired_alerts_created ?? 0}.`);
     toast('Expiry check completed');
   } catch (error) {
     notice(`Expiry check: ${error.message}`, 'error');

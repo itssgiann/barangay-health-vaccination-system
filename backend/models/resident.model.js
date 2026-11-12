@@ -24,25 +24,20 @@ const getVaccinationReport = (callback) => {
 };
 
 const getWithRecords = (callback) => {
-    // Keep all residents, even when no vaccination has been recorded.
     const sql = `
         SELECT
             r.resident_id,
-            CONCAT_WS(' ', r.first_name, r.middle_name, r.last_name) AS resident_name,
-            vr.record_id,
-            v.vaccine_name,
-            vb.batch_number,
-            im.dose_number,
+            r.first_name,
+            r.last_name,
             vr.date_administered,
             vr.next_due_date,
             vr.next_dose_status
         FROM residents r
-        LEFT JOIN vaccination_records vr ON r.resident_id = vr.resident_id
-        LEFT JOIN vaccine_batches vb ON vr.batch_id = vb.batch_id
-        LEFT JOIN vaccines v ON vb.vaccine_id = v.vaccine_id
-        LEFT JOIN immunization_milestones im ON vr.milestone_id = im.milestone_id
-        ORDER BY r.resident_id, vr.date_administered, vr.record_id
+        LEFT JOIN vaccination_records vr
+            ON r.resident_id = vr.resident_id
+        ORDER BY r.resident_id, vr.record_id
     `;
+
     db.query(sql, callback);
 };
 

@@ -282,10 +282,7 @@
       errorBox.hidden = true;
       cards.replaceChildren();
       try {
-        const token = sessionStorage.getItem('bhs_auth_token');
-        if (!token) throw new Error('Please sign in to view the vaccination report.');
-        const response = await fetch(API_URL, { headers: { Accept: 'application/json', Authorization: 'Bearer ' + token } });
-        if (response.status === 401) throw new Error('Your login session is no longer valid. Please sign in again.');
+        const response = await fetch(API_URL, { headers: { Accept: 'application/json' } });
         if (!response.ok) throw new Error('Unable to load vaccination report (HTTP ' + response.status + ').');
         const rows = await response.json();
         if (!Array.isArray(rows)) throw new Error('The server returned an unexpected report format.');
@@ -301,7 +298,7 @@
         document.getElementById('statResidents').textContent = '—';
         document.getElementById('statRecords').textContent = '—';
         document.getElementById('statFollowup').textContent = '—';
-        errorBox.textContent = error.message;
+        errorBox.textContent = error.message + ' Please check the backend and database connection, then refresh.';
         errorBox.hidden = false;
         resultText.textContent = 'Report unavailable';
         document.getElementById('footerText').textContent = 'Connection error';

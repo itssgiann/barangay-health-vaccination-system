@@ -210,7 +210,7 @@ const PAGE = {
         },
         {
           "key": "temperature_celsius",
-          "label": "Body Temperature (°C)",
+          "label": "Temperature Celsius",
           "required": false,
           "type": "decimal"
         },
@@ -228,13 +228,13 @@ const PAGE = {
         },
         {
           "key": "weight_kg",
-          "label": "Weight (kg)",
+          "label": "Weight Kg",
           "required": false,
           "type": "decimal"
         },
         {
           "key": "height_cm",
-          "label": "Height (cm)",
+          "label": "Height Cm",
           "required": false,
           "type": "decimal"
         },
