@@ -4,7 +4,7 @@ const getAll = (callback) => {
     db.query('SELECT * FROM residents', callback);
 };
 
-// Get resident vaccination report
+
 const getVaccinationReport = (callback) => {
     const sql = `
         SELECT

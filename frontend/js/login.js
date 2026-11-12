@@ -1,4 +1,4 @@
-/* Barangay Health: login (Step 2). Backend must implement POST /api/users/login. */
+
 (() => {
   'use strict';
   const form = document.getElementById('loginForm');
@@ -67,7 +67,7 @@
       if (typeof data.token !== 'string' || !data.token || !data.user || !data.user.username) {
         throw new Error('Login response is missing a token or user details.');
       }
-      // Session-scoped storage: cleared when the browser tab session ends.
+
       sessionStorage.setItem('bhs_auth_token', data.token);
       sessionStorage.setItem('bhs_user', JSON.stringify({
         username: data.user.username, role: data.user.role,
